@@ -64,21 +64,7 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
 
-    implementation "com.squareup.retrofit2:retrofit:2.9.0"
-    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
-
     implementation "io.insert-koin:koin-android:3.3.3"
 
-
-    // Other dependencies...
-    // Kotlinx Serialization dependency
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2"
-    // Retrofit kotlin-serialzation-converter
-    // It lets Retrofit use the Kotlin Serialization library to convert API requests and responses.
-    implementation "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0"
-
-
-    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
-
-
+    implementation (project(":country-datasource"))
 }
