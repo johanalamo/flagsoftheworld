@@ -3,6 +3,7 @@ package com.alamo.flagsoftheworld
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -11,10 +12,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.alamo.flagsoftheworld.ui.theme.FlagsOfTheWorldTheme
 import com.example.country_datasource.network.CountryService
-import com.example.country_datasource.network.model.CountryDto
+import com.example.country_datasource.network.model.toCountry
+import com.example.country_domain.Country
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.delay
@@ -48,11 +52,11 @@ class MainActivity : ComponentActivity() {
 
         val countryService = CountryService.build()
 
-        var countryList: MutableState<List<CountryDto>> = mutableStateOf(listOf())
+        var countryList: MutableState<List<Country>> = mutableStateOf(listOf())
 
         CoroutineScope(IO).launch {
             delay(2000)
-            countryList.value = countryService.getAllCountries()
+            countryList.value = countryService.getAllCountries().map { it.toCountry() }
         }
 
         setContent {
@@ -65,10 +69,58 @@ class MainActivity : ComponentActivity() {
                 ) {
                     LazyColumn() {
                         itemsIndexed(items = countryList.value) { _, element ->
-                            Text(text = element.name?.common ?: "not available")
+                            CountryCard(
+                                name = element.name,
+                                region = element.region,
+                                subregion = element.subregion,
+                                flag = element.flag,
+                                population = element.population,
+                            ) {
+
+                            }
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CountryCard(
+    name: String?,
+    region: String?,
+    subregion: String?,
+    flag: String?,
+    population: Long?,
+    onClick: () -> Unit,
+) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .border(1.dp, color = Color.Black),
+        onClick = {
+            onClick()
+        },
+    ) {
+        Column {
+            Row {
+                Text(
+                    modifier = Modifier.padding(end = 8.dp),
+                    text = flag ?: "",
+                )
+                Text(text = name ?: "undefinded")
+            }
+            Text(text = region ?: "no_region")
+            Text(text = subregion ?: "no_subregion")
+            Row {
+                Text(
+                    modifier = Modifier.padding(end = 8.dp),
+                    text = "Population:",
+                )
+                Text(text = population.toString())
             }
         }
     }

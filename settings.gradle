@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 rootProject.name = "FlagsOfTheWorld"
 include ':app'
 include ':country-datasource'
+include ':country-domain'
