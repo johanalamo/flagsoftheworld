@@ -1,11 +1,8 @@
-package com.example.country_datasource.network
+package com.alamo.country_datasource.network
 
-import com.example.country_datasource.network.Constants.BASE_URL
-import com.example.country_datasource.network.model.CountryDto
+import com.alamo.country_datasource.network.Constants.BASE_URL
+import com.alamo.country_datasource.network.model.CountryDto
 import com.google.gson.GsonBuilder
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET

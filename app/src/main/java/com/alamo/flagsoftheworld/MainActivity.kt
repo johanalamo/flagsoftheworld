@@ -15,14 +15,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alamo.core.domain.DataState
 import com.alamo.flagsoftheworld.ui.theme.FlagsOfTheWorldTheme
-import com.example.country_datasource.network.CountryService
-import com.example.country_datasource.network.model.toCountry
-import com.example.country_domain.Country
-import kotlinx.coroutines.CoroutineScope
+import com.alamo.country_datasource.network.CountryService
+import com.alamo.country_datasource.network.model.toCountry
+import com.alamo.country_domain.Country
+import com.alamo.country_interactors.GetCountries
+import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 //decidido.. a usar dos
 //info about countries: https://restcountries.com/
@@ -51,13 +53,32 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val countryService = CountryService.build()
-
-        var countryList: MutableState<List<Country>> = mutableStateOf(listOf())
-
+        var countryList: MutableState<List<Country>?> = mutableStateOf(listOf())
         CoroutineScope(IO).launch {
             delay(2000)
-            countryList.value = countryService.getAllCountries().map { it.toCountry() }
+//            countryList.value = countryService.getAllCountries().map { it.toCountry() }
         }
+
+        var getCountries: GetCountries = GetCountries(countryService)
+        println("avilan before execute")
+        getCountries.execute().onEach { dataState ->  
+            when (dataState) {
+                is DataState.Loading -> {
+                    println("avilan -> is Loading: " + dataState.isLoading)
+                }
+                is DataState.Error -> {
+                    println("avilan -> is DataError: " + dataState.error)
+                }
+                is DataState.Success -> {
+                    val list = dataState.data
+                    countryList.value = dataState.data
+                    println("avilan success: ")
+                    list?.forEach {
+                        println("avilan pais: " + it.name)
+                    }
+                }
+            }
+        }.launchIn(GlobalScope)
 
         setContent {
 
@@ -68,15 +89,17 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     LazyColumn() {
-                        itemsIndexed(items = countryList.value) { _, element ->
-                            CountryCard(
-                                name = element.name,
-                                region = element.region,
-                                subregion = element.subregion,
-                                flag = element.flag,
-                                population = element.population,
-                            ) {
+                        countryList.value?.let {
+                            itemsIndexed(items = it) { _, element ->
+                                CountryCard(
+                                    name = element.name,
+                                    region = element.region,
+                                    subregion = element.subregion,
+                                    flag = element.flag,
+                                    population = element.population,
+                                ) {
 
+                                }
                             }
                         }
                     }

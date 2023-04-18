@@ -1,4 +1,4 @@
-package com.example.country_datasource.network.model
+package com.alamo.country_datasource.network.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

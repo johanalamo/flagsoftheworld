@@ -1,4 +1,4 @@
-package com.example.country_domain
+package com.alamo.country_domain
 
 data class Country (
     val name: String?,

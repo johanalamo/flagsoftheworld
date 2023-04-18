@@ -1,6 +1,6 @@
-package com.example.country_datasource.network.model
+package com.alamo.country_datasource.network.model
 
-import com.example.country_domain.Country
+import com.alamo.country_domain.Country
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
