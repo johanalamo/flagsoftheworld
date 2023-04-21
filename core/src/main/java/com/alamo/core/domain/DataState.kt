@@ -5,6 +5,8 @@ sealed class DataState<T> {
 //    object Uninitialized () : DataState<T>()
 // try to change following to objects>
 
+    // TODO: try to quit <T> from loading and
+
     data class Loading<T>(
         val isLoading: Boolean = false
     ) : DataState<T>()
