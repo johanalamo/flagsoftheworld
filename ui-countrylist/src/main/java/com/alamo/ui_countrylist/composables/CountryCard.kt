@@ -25,7 +25,7 @@ fun CountryCard(
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .border(1.dp, color = Color.Blue),
+            .border(1.dp, color = Color.Red),
         onClick = {
             onClick()
         },

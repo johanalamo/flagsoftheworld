@@ -62,8 +62,6 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:1.4.2"
     debugImplementation "androidx.compose.ui:ui-test-manifest:1.4.2"
 
-    implementation "io.insert-koin:koin-android:3.3.3"
-
     implementation (project(":country-datasource"))
     implementation (project(":country-interactors"))
     implementation (project(":ui-countrylist"))
