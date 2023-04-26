@@ -50,6 +50,7 @@ dependencies {
 
     implementation(project(":country-interactors"))
     implementation(project(":country-domain"))
+    implementation(project(":jc-ui-components"))
     implementation(project(":core"))
 
 }
