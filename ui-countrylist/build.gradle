@@ -46,7 +46,12 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling:1.4.2"
     implementation "androidx.compose.ui:ui:1.4.2"
     implementation "androidx.compose.ui:ui-tooling-preview:1.4.2"
-    implementation 'androidx.compose.material3:material3:1.1.0-beta02'
+    implementation 'androidx.compose.material3:material3:1.1.0-rc01'
+
+    // For jetpack compose previews
+    implementation "androidx.compose.ui:ui-tooling:1.4.2"
+    implementation "androidx.compose.ui:ui:1.4.2"
+    implementation "androidx.compose.ui:ui-tooling-preview:1.4.2"
 
     implementation(project(":country-interactors"))
     implementation(project(":country-domain"))

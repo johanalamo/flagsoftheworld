@@ -23,12 +23,7 @@ fun CountryList(
         color = MaterialTheme.colorScheme.background
     ) {
 
-        if (state.isLoading) {
-            Loader("Loading from the network")
-        }
-
         if (state.error != null) {
-
             GenericDialog(
                 title = "Error " + state.error?.first,
                 description = "Error trying to get the contry list from the network: "
@@ -64,6 +59,10 @@ fun CountryList(
                     }
                 }
             }
+        }
+
+        if (state.isLoading) {
+            Loader("Loading from the network")
         }
     }
 }
