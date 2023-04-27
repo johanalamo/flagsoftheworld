@@ -24,6 +24,17 @@ import com.alamo.ui_countrylist.ui.*
 
 
 /* TODO:
+
+improve CountryList view
+ - add favorite functionality
+
+add data base cache
+add add/remove favorite feature
+add filter dialog (favorites)
+add searching dialo
+
+
+
 learn
 
 koin
