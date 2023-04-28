@@ -1,21 +1,21 @@
 package com.alamo.jc_ui_components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun Loader(message: String? = null) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth(1f)
-            .fillMaxHeight(1f),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -23,7 +23,11 @@ fun Loader(message: String? = null) {
             Text(
                 text = it,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(vertical = 6.dp),
+                modifier = Modifier
+                    .alpha(0.7f)
+                    .fillMaxWidth()
+                    .background(color = Color.White),
+                fontSize = 10.sp
             )
         }
         LinearProgressIndicator(
@@ -32,10 +36,4 @@ fun Loader(message: String? = null) {
                 .padding(horizontal = 10.dp)
         )
     }
-}
-
-@Composable
-@Preview
-fun LoaderPreview() {
-    Loader("Loading from the network")
 }

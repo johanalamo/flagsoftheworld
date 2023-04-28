@@ -26,12 +26,27 @@ import com.alamo.ui_countrylist.ui.*
 /* TODO:
 
 improve CountryList view
- - add favorite functionality
+ - add favorite icon
 
-add data base cache
-add add/remove favorite feature
+
+add data base cache -room database
+add add/remove favorite feature / shared preferences
 add filter dialog (favorites)
-add searching dialo
+add searching dialog
+
+filter dialog example
+
++-------------------------------------+
+| what to show
+|    show all
+|    show favorites
+|show as
+|    list
+|    grid
+|
+|
+|
++-------------------------------------+
 
 
 
