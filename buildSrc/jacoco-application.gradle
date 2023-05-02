@@ -78,7 +78,7 @@ def createVariantCoverage(variant) {
     def testTaskName = "test${variantName.capitalize()}UnitTest"
 
     // Add unit test coverage tasks
-    tasks.create(name: "${testTaskName}Coverage", type: JacocoReport, dependsOn: "$testTaskName") {
+    tasks.create(name: "${testTaskName}JacocoCoverage", type: JacocoReport, dependsOn: "$testTaskName") {
         group = "Reporting"
         description = "Generate Jacoco coverage reports for the ${variantName.capitalize()} build."
 
@@ -105,7 +105,7 @@ def createVariantCoverage(variant) {
     }
 
     // Add unit test coverage verification tasks
-    tasks.create(name: "${testTaskName}CoverageVerification", type: JacocoCoverageVerification, dependsOn: "${testTaskName}Coverage") {
+    tasks.create(name: "${testTaskName}JacocoCoverageVerification", type: JacocoCoverageVerification, dependsOn: "${testTaskName}Coverage") {
         group = "Reporting"
         description = "Verifies Jacoco coverage for the ${variantName.capitalize()} build."
         violationRules {
