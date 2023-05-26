@@ -1,44 +1,89 @@
 package com.alamo.country_interactors
 
+import com.alamo.core.domain.DataState
 import com.alamo.country_datasource.network.CountryService
 import com.alamo.country_datasource.network.model.CountryDto
 import com.alamo.country_datasource.network.model.CountryNameDto
-import com.alamo.country_domain.Country
-import org.junit.Assert.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.Before
 import org.junit.Test
+import org.mockito.Mock
+import org.mockito.MockitoAnnotations
+import org.mockito.kotlin.whenever
+import kotlin.test.assertIs
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class GetCountriesTest {
 
-    // TODO: 2023-05-26 tests must be implemented
+    // Helper values
+    val countryList = listOf<CountryDto>(
+        CountryDto(name = CountryNameDto(common = "Venezuela")),
+        CountryDto(name = CountryNameDto(common = "Argentina")),
+        CountryDto(name = CountryNameDto(common = "Uruguay")),
+    )
+
+    // End Helper values
 
     lateinit var SUT: GetCountries
 
+    @Mock
+    lateinit var countryService: CountryService
+
     @Before
     fun setUp() {
-        SUT = GetCountries(
-            object : CountryService {
-                override suspend fun getAllCountries(): List<CountryDto> {
-                    return listOf(
-                        CountryDto(name = CountryNameDto(common = "Venezuela")),
-                        CountryDto(name = CountryNameDto(common = "Argentina")),
-                        CountryDto(name = CountryNameDto(common = "Uruguay")),
-                    )
-                }
-            }
-        )
+        MockitoAnnotations.openMocks(this)
+
+        SUT = GetCountries(countryService)
+
+        Dispatchers.setMain(Dispatchers.Unconfined)
+    }
+
+
+    @Test
+    fun  `execute() SHOULD return a country list WHEN it is connected`() = runTest {
+        // GIVEN
+        setSuccess()
+
+        // WHEN
+        val emmisions = mutableListOf<DataState>()
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+            SUT.execute().toList(emmisions)
+        }
+
+        // THEN
+        assertIs<DataState.Loading>(emmisions[0])
+        assertIs<DataState.Success<List<CountryDto>>>(emmisions[1])
     }
 
     @Test
-    fun test2() {
-        assert(true)
+    fun  `execute() SHOULD emit an error WHEN a network connection happens`() = runTest {
+        // GIVEN
+        setError()
+
+        // WHEN
+        val emmisions = mutableListOf<DataState>()
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+            SUT.execute().toList(emmisions)
+        }
+
+        // THEN
+        assertIs<DataState.Loading>(emmisions[0])
+        assertIs<DataState.Error>(emmisions[1])
     }
-    @Test
-    fun test3() {
-        assert(true)
+
+    // Helper methods
+    fun setSuccess() = runBlocking {
+        whenever(countryService.getAllCountries()).thenReturn(countryList)
     }
-    @Test
-    fun test4() {
-        assert(true)
+
+    fun setError() = runBlocking {
+        whenever(countryService.getAllCountries()).thenThrow()
     }
 }

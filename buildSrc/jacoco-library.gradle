@@ -4,6 +4,10 @@ jacoco {
     toolVersion = "0.8.8"
 }
 
+project.getTasks().findByName("jacocoTestReport").dependsOn("test")
+
+project.getTasks().findByName("jacocoTestCoverageVerification").dependsOn("jacocoTestReport")
+
 project.getTasks().findByName("jacocoTestCoverageVerification").configure {
 
     violationRules {
