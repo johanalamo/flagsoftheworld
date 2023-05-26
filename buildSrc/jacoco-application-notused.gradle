@@ -1,7 +1,9 @@
+// TODO: 2023-05-26 REMOVE THIS FILE, IT IS BEING SAVED ONLY FOR REFERENCE
+// IT IS NOT BEING USED
 // File not used, this is an example for create customized jacoco tasks
 // it should be called in this way
 //
-//   apply from: '../buildSrc/jacoco-application.gradle'
+//   apply from: '../buildSrc/jacoco-application-notused.gradle'
 //
 
 apply plugin: 'jacoco'
@@ -123,7 +125,7 @@ def createVariantCoverage(variant) {
                 limit {
                     counter = 'LINE'
                     value = 'COVEREDRATIO'
-                    minimum = 0.30
+                    minimum = 0.90
                 }
             }
         }

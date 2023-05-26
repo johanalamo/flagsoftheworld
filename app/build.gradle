@@ -6,7 +6,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:7.0.4'
         //Jacoco Plugin
-        classpath "org.jacoco:org.jacoco.core:0.8.7"
+        classpath "org.jacoco:org.jacoco.core:0.8.8"
     }
 }
 
@@ -15,8 +15,6 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlinx-serialization'
 }
-
-apply from: '../buildSrc/jacoco-application.gradle'
 
 android {
     namespace 'com.alamo.flagsoftheworld'
@@ -39,10 +37,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-        // for jacoco
-        debug{
-            testCoverageEnabled true
         }
     }
     compileOptions {

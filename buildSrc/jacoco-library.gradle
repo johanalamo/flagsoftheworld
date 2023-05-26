@@ -1,0 +1,79 @@
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = "0.8.8"
+}
+
+project.getTasks().findByName("jacocoTestCoverageVerification").configure {
+
+    violationRules {
+
+        failOnViolation = true
+
+        rule {
+            limit {
+                minimum = 0.94
+            }
+        }
+
+        rule {
+            element = 'BUNDLE'
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.93
+            }
+        }
+
+        rule {
+            element = 'CLASS'
+            includes = ['*Presenter*']
+
+            limit {
+                value = 'MISSEDCOUNT'
+                counter = 'CLASS'
+                minimum = 0.92
+            }
+
+            limit {
+                value = 'COVEREDRATIO'
+                counter = 'METHOD'
+                minimum = 0.91
+            }
+        }
+
+        rule {
+            element = 'CLASS'
+            includes = ['*Tracker*']
+
+            limit {
+                value = 'MISSEDCOUNT'
+                counter = 'CLASS'
+                minimum = 0
+            }
+
+            limit {
+                value = 'COVEREDRATIO'
+                counter = 'METHOD'
+                minimum = 1.0
+            }
+        }
+
+        rule {
+            element = 'CLASS'
+            includes = ['*ExperimentViewFactory*']
+
+            limit {
+                value = 'MISSEDCOUNT'
+                counter = 'CLASS'
+                minimum = 0
+            }
+
+            limit {
+                value = 'COVEREDRATIO'
+                counter = 'METHOD'
+                minimum = 1.0
+            }
+        }
+    }
+}
