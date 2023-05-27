@@ -3,7 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm'
 }
 
-apply from: '../buildSrc/jacoco-library.gradle'
+apply from: '../buildSrc/jacoco-java-library.gradle'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
