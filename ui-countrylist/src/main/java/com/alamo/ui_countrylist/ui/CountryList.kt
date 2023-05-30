@@ -55,7 +55,9 @@ fun CountryList(
                                 region = country.region,
                                 subregion = country.subregion,
                                 flag = country.flag,
+                                codeISO3 = country.codeISO3,
                                 population = country.population,
+                                capital = country.capital,
                             ) {
 
                             }

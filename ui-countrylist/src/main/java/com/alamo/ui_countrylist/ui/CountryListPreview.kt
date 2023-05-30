@@ -12,9 +12,9 @@ fun CountryListThreeElementsPreview() {
         state = CountryListState(
             isLoading = false,
             list = listOf<Country>(
-                Country(name = "Venezuela"),
-                Country(name = "Argentina"),
-                Country(name = "Uruguay"),
+                Country(name = "Venezuela", codeISO3 = "VEN", capital = listOf("Caracas")),
+                Country(name = "Argentina", codeISO3 = "ARG", capital = listOf("Buenos Aires")),
+                Country(name = "Uruguay", codeISO3 = "URY", capital = listOf("Montevideo")),
             ),
             error = null,
         ),
@@ -30,9 +30,9 @@ fun CountryListErrorPreview() {
         state = CountryListState(
             isLoading = false,
             list = listOf<Country>(
-                Country(name = "Venezuela"),
-                Country(name = "Argentina"),
-                Country(name = "Uruguay"),
+                Country(name = "Venezuela", codeISO3 = "VEN", capital = listOf("Caracas")),
+                Country(name = "Argentina", codeISO3 = "ARG", capital = listOf("Buenos Aires")),
+                Country(name = "Uruguay", codeISO3 = "URY", capital = listOf("Montevideo")),
             ),
             error = Pair(103, "Testing an error"),
         ),
@@ -48,9 +48,9 @@ fun CountryListLoadingPreview() {
         state = CountryListState(
             isLoading = true,
             list = listOf<Country>(
-                Country(name = "Venezuela"),
-                Country(name = "Argentina"),
-                Country(name = "Uruguay"),
+                Country(name = "Venezuela", codeISO3 = "VEN", capital = listOf("Caracas")),
+                Country(name = "Argentina", codeISO3 = "ARG", capital = listOf("Buenos Aires")),
+                Country(name = "Uruguay", codeISO3 = "URY", capital = listOf("Montevideo")),
             ),
             error = null,
         ),

@@ -24,9 +24,9 @@ class GetCountriesTest {
 
     // Helper values
     val countryList = listOf<CountryDto>(
-        CountryDto(name = CountryNameDto(common = "Venezuela")),
-        CountryDto(name = CountryNameDto(common = "Argentina")),
-        CountryDto(name = CountryNameDto(common = "Uruguay")),
+        CountryDto(name = CountryNameDto(common = "Venezuela"), codeISO3 = "VEN", capital = listOf("Caracas")),
+        CountryDto(name = CountryNameDto(common = "Argentina"), codeISO3 = "ARG", capital = listOf("Buenos Aires")),
+        CountryDto(name = CountryNameDto(common = "Uruguay"), codeISO3 = "URY", capital = listOf("Montevideo")),
     )
 
     // End Helper values

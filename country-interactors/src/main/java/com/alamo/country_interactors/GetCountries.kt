@@ -19,6 +19,7 @@ class GetCountries(
                     data = list
                 ))
             } catch (e: Exception) {
+                e.printStackTrace(System.err)
                 emit(DataState.Error(code = 101, description = "No connection"))
             }
         }

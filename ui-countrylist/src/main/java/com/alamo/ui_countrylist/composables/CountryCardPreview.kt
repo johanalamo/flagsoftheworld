@@ -8,10 +8,12 @@ import androidx.compose.ui.tooling.preview.Preview
 fun CountryCardPreview() {
     CountryCard(
         name = "Venezuela",
+        codeISO3 = "VEN",
         region = "America",
         subregion = "Suramerica",
         flag = "🇻🇪",
         population = 28001002,
+        capital = listOf("Caracas", "Los Teques"),
         onClick = {},
     )
 }

@@ -14,11 +14,13 @@ import com.alamo.jc_ui_components.PersonalizedIcons
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CountryCard(
-    name: String?,
+    name: String,
     region: String?,
     subregion: String?,
     flag: String?,
+    codeISO3: String?,
     population: Long?,
+    capital: List<String>?,
     onClick: () -> Unit,
 ) {
     Card(
@@ -45,7 +47,11 @@ fun CountryCard(
                         .fillMaxWidth(0.1f),
                     text = flag ?: "",
                 )
-                Text(modifier = Modifier.fillMaxWidth(0.7f), text = name ?: "undefinded")
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(0.7f),
+                    text = "$name ($codeISO3)"
+                )
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.End
@@ -61,6 +67,15 @@ fun CountryCard(
                     text = "Population:",
                 )
                 Text(text = population.toString())
+            }
+            capital?.let {
+                Row {
+                    Text(
+                        modifier = Modifier.padding(end = 8.dp),
+                        text = "Capital:",
+                    )
+                    Text(text = it.joinToString(", "))
+                }
             }
         }
     }
