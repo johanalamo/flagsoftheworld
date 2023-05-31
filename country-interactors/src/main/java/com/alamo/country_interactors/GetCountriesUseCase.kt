@@ -6,7 +6,7 @@ import com.alamo.country_datasource.network.model.toCountry
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class GetCountries(
+class GetCountriesUseCase(
     private val countryService: CountryService
 ) {
 

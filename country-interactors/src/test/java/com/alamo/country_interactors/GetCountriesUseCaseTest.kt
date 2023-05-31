@@ -20,7 +20,7 @@ import kotlin.test.assertIs
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class GetCountriesTest {
+class GetCountriesUseCaseTest {
 
     // Helper values
     val countryList = listOf<CountryDto>(
@@ -31,7 +31,7 @@ class GetCountriesTest {
 
     // End Helper values
 
-    lateinit var SUT: GetCountries
+    lateinit var SUT: GetCountriesUseCase
 
     @Mock
     lateinit var countryService: CountryService
@@ -40,7 +40,7 @@ class GetCountriesTest {
     fun setUp() {
         MockitoAnnotations.openMocks(this)
 
-        SUT = GetCountries(countryService)
+        SUT = GetCountriesUseCase(countryService)
 
         Dispatchers.setMain(Dispatchers.Unconfined)
     }

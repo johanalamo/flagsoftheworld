@@ -3,14 +3,14 @@ package com.alamo.ui_countrylist.ui
 import androidx.lifecycle.ViewModel
 import com.alamo.core.domain.DataState
 import com.alamo.country_domain.Country
-import com.alamo.country_interactors.GetCountries
+import com.alamo.country_interactors.GetCountriesUseCase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class CountryListViewModel(
-    val getCountries: GetCountries,
+    val getCountriesUseCase: GetCountriesUseCase,
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<CountryListState> = MutableStateFlow(CountryListState())
@@ -33,7 +33,7 @@ class CountryListViewModel(
         CoroutineScope(Dispatchers.IO).launch {
             _state.update { it.copy(isLoading = true) }
 
-            getCountries.execute().collect { dataState ->
+            getCountriesUseCase.execute().collect { dataState ->
                 when (dataState) {
                     is DataState.Loading -> {
                         _state.update { it.copy(isLoading = true) }

@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.*
 import com.alamo.flagsoftheworld.ui.theme.FlagsOfTheWorldTheme
 import com.alamo.country_datasource.network.CountryService
-import com.alamo.country_interactors.GetCountries
+import com.alamo.country_interactors.GetCountriesUseCase
 import com.alamo.ui_countrylist.ui.*
 
 //decidido.. a usar dos
@@ -73,11 +73,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val viewModel = CountryListViewModel(
-            getCountries = GetCountries(
+            getCountriesUseCase = GetCountriesUseCase(
                 CountryService.build()
             )
         )
-
         setContent {
             viewModel.onTriggerEvent(CountryListEvents.GetCountries)
             FlagsOfTheWorldTheme {
