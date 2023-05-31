@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id 'org.jetbrains.kotlin.jvm'
+    id "app.cash.sqldelight" version "2.0.0-alpha05"
 }
 
 java {
@@ -17,4 +18,12 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.11'
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.11'
     implementation(project(":country-domain"))
+}
+
+sqldelight {
+    databases {
+        CountryDatabase { // This will be the name of the generated database class.
+            packageName = "com.alamo.country_datasource.cache"
+        }
+    }
 }

@@ -79,4 +79,6 @@ dependencies {
     implementation (project(":ui-countrylist"))
     implementation (project(":core"))
     implementation project(path: ':country-domain')
+
+    implementation "app.cash.sqldelight:android-driver:2.0.0-alpha05"
 }

@@ -1,0 +1,20 @@
+CREATE TABLE countryFavorite_Entity(
+    codeIso TEXT NOT NULL PRIMARY KEY
+);
+
+getFavorites:
+SELECT *
+FROM countryFavorite_Entity;
+
+addFavorite:
+INSERT OR REPLACE
+INTO countryFavorite_Entity (
+    codeIso
+) VALUES (?);
+
+removeFavorite:
+DELETE FROM countryFavorite_Entity
+WHERE codeIso = :codeIso;
+
+removeAllFavorites:
+DELETE FROM countryFavorite_Entity;

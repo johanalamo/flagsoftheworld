@@ -36,7 +36,6 @@ interface CountryService {
 //                )
                 .client(
                     client
-
                 )
                 .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
                 .build()
