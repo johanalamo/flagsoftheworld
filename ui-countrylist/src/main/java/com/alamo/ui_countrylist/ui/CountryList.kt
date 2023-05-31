@@ -28,9 +28,9 @@ fun CountryList(
         Box(modifier = Modifier) {
             if (state.error != null) {
                 GenericDialog(
-                    title = "Error " + state.error?.first,
+                    title = "Error " + state.error.first,
                     description = "Error trying to get the contry list from the network: "
-                            + state.error?.second,
+                            + state.error.second,
                     onConfirm = {
                         events(CountryListEvents.CloseErrorDialog)
                         events(CountryListEvents.GetCountries)
@@ -48,8 +48,7 @@ fun CountryList(
             } else {
                 LazyColumn() {
                     state.list.let {
-                        itemsIndexed(items = it) { _, element ->
-                            val country = element as Country
+                        itemsIndexed(items = it) { _, country ->
                             CountryCard(
                                 name = country.name,
                                 region = country.region,

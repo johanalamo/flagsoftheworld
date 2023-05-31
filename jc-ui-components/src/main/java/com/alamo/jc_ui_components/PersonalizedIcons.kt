@@ -11,7 +11,7 @@ object PersonalizedIcons {
             var _isNotFavorite: ImageVector? = null
 
             if (_isNotFavorite != null) {
-                return _isNotFavorite!!
+                return _isNotFavorite
             }
             _isNotFavorite = materialIcon(name = "TwoTone.Favorite") {
                 materialPath(fillAlpha = 0.1f, strokeAlpha = 1f) {
@@ -51,7 +51,7 @@ object PersonalizedIcons {
                     close()
                 }
             }
-            return _isNotFavorite!!
+            return _isNotFavorite
         }
 
     val IsFavorite: ImageVector
@@ -59,7 +59,7 @@ object PersonalizedIcons {
             var _isFavorite: ImageVector? = null
 
             if (_isFavorite != null) {
-                return _isFavorite!!
+                return _isFavorite
             }
             _isFavorite = materialIcon(name = "TwoTone.Favorite") {
                 materialPath(fillAlpha = 1f, strokeAlpha = 1f) {
@@ -99,6 +99,6 @@ object PersonalizedIcons {
                     close()
                 }
             }
-            return _isFavorite!!
+            return _isFavorite
         }
 }
