@@ -52,14 +52,14 @@ class GetCountriesUseCaseTest {
         setSuccess()
 
         // WHEN
-        val emmisions = mutableListOf<DataState>()
+        val emissions = mutableListOf<DataState>()
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-            SUT.execute().toList(emmisions)
+            SUT.execute().toList(emissions)
         }
 
         // THEN
-        assertIs<DataState.Loading>(emmisions[0])
-        assertIs<DataState.Success<List<CountryDto>>>(emmisions[1])
+        assertIs<DataState.Loading>(emissions[0])
+        assertIs<DataState.Success<List<CountryDto>>>(emissions[1])
     }
 
     @Test
@@ -68,14 +68,14 @@ class GetCountriesUseCaseTest {
         setError()
 
         // WHEN
-        val emmisions = mutableListOf<DataState>()
+        val emissions = mutableListOf<DataState>()
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-            SUT.execute().toList(emmisions)
+            SUT.execute().toList(emissions)
         }
 
         // THEN
-        assertIs<DataState.Loading>(emmisions[0])
-        assertIs<DataState.Error>(emmisions[1])
+        assertIs<DataState.Loading>(emissions[0])
+        assertIs<DataState.Error>(emissions[1])
     }
 
     // Helper methods
