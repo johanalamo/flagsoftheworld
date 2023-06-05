@@ -9,17 +9,16 @@ import java.lang.Exception
 class AddCountryToFavoritesUseCase(
     private val countryCache: CountryCache
 ) {
-   fun execute(countryCode: String): Flow<DataState> {
-       return flow {
-           emit(DataState.Loading)
-           try {
-               countryCache.addToFavorites(countryCode = countryCode)
-               emit(DataState.Success<Nothing>())
-
-           } catch (e: Exception) {
-               e.printStackTrace()
-               emit(DataState.Error(999, "network error"))
-           }
-       }
-   }
+    fun execute(countryCode: String): Flow<DataState> {
+        return flow {
+            emit(DataState.Loading)
+            try {
+                countryCache.addToFavorites(countryCode = countryCode)
+                emit(DataState.Success<Nothing>())
+            } catch (e: Exception) {
+                e.printStackTrace()
+                emit(DataState.Error(999, "network error"))
+            }
+        }
+    }
 }

@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.flow
 
 class GetCountriesUseCase(
     private val countryService: CountryService
-) {
+) : UseCase {
 
-    fun execute(): Flow<DataState> {
+    override fun execute(): Flow<DataState> {
         return flow {
             try {
                 emit(DataState.Loading)
