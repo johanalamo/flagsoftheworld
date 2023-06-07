@@ -23,47 +23,9 @@ project.ext.minimumCoverage = 0.70
 project.ext.jacocoGroup = "Reporting"
 
 // classes to exclude from coverage tasks
-ext.excludes = [
-        '**/databinding/*Binding.*',
-        '**/R.class',
-        '**/R$*.class',
-        '**/BuildConfig.*',
-        '**/Manifest*.*',
-        '**/*Test*.*',
-        'android/**/*.*',
-        // butterKnife
-        '**/*$ViewInjector*.*',
-        '**/*$ViewBinder*.*',
-        '**/Lambda$*.class',
-        '**/Lambda.class',
-        '**/*Lambda.class',
-        '**/*Lambda*.class',
-        '**/*_MembersInjector.class',
-        '**/Dagger*Component*.*',
-        '**/*Module_*Factory.class',
-        '**/di/module/*',
-        '**/*_Factory*.*',
-        '**/*Module*.*',
-        '**/*Dagger*.*',
-        '**/*Hilt*.*',
-        // kotlin
-        '**/*MapperImpl*.*',
-        '**/*$ViewInjector*.*',
-        '**/*$ViewBinder*.*',
-        '**/BuildConfig.*',
-        '**/*Component*.*',
-        '**/*BR*.*',
-        '**/Manifest*.*',
-        '**/*$Lambda$*.*',
-        '**/*Companion*.*',
-        '**/*Module*.*',
-        '**/*Dagger*.*',
-        '**/*Hilt*.*',
-        '**/*MembersInjector*.*',
-        '**/*_MembersInjector.class',
-        '**/*_Factory*.*',
-        '**/*_Provide*Factory*.*',
-        '**/*Extensions*.*',
+project.ext.excludes = [
+        '**/composables/*.*',
+        '**/BuildConfig*.*',
 ]
 
 // Implementation section **************************************************************************
@@ -171,14 +133,37 @@ def createVariantCoverage(variant) {
         it.description = "Verifies Jacoco coverage for the ${variantName.capitalize()} build."
         violationRules {
             rule {
-                limit {
-                    minimum = 0
-                }
-            }
-            rule {
-                element = 'BUNDLE'
+                // it could be 'SOURCEFILE', 'BUNDLE', 'CLASS', 'PACKAGE', 'METHOD'
+                element = 'CLASS'
+                excludes = project.excludes
+
                 limit {
                     counter = 'LINE'
+                    value = 'COVEREDRATIO'
+                    minimum = project.ext.minimumCoverage
+                }
+                limit {
+                    counter = 'CLASS'
+                    value = 'COVEREDRATIO'
+                    minimum = project.ext.minimumCoverage
+                }
+                limit {
+                    counter = 'METHOD'
+                    value = 'COVEREDRATIO'
+                    minimum = project.ext.minimumCoverage
+                }
+                limit {
+                    counter = 'COMPLEXITY'
+                    value = 'COVEREDRATIO'
+                    minimum = project.ext.minimumCoverage
+                }
+                limit {
+                    counter = 'BRANCH'
+                    value = 'COVEREDRATIO'
+                    minimum = project.ext.minimumCoverage
+                }
+                limit {
+                    counter = 'INSTRUCTION'
                     value = 'COVEREDRATIO'
                     minimum = project.ext.minimumCoverage
                 }
