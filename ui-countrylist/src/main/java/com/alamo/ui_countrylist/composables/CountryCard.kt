@@ -21,6 +21,7 @@ fun CountryCard(
     codeISO3: String?,
     population: Long?,
     capital: List<String>?,
+    isFavorite: Boolean,
     onClick: () -> Unit,
 ) {
     Card(
@@ -56,7 +57,11 @@ fun CountryCard(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.End
                 ) {
-                    Icon(PersonalizedIcons.IsNotFavorite, contentDescription = "",)
+                    if (isFavorite) {
+                        Icon(PersonalizedIcons.IsFavorite, contentDescription = "",)
+                    } else {
+                        Icon(PersonalizedIcons.IsNotFavorite, contentDescription = "",)
+                    }
                 }
             }
             Text(text = region ?: "no_region")

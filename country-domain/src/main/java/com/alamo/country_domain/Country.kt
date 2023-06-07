@@ -8,4 +8,5 @@ data class Country (
     val capital: List<String>?,
     val subregion: String? = null,
     val flag: String? = null,
+    var isFavorite: Boolean = false,
 )

@@ -57,6 +57,7 @@ fun CountryList(
                                 codeISO3 = country.codeISO3,
                                 population = country.population,
                                 capital = country.capital,
+                                isFavorite = country.isFavorite,
                             ) {
 
                             }
