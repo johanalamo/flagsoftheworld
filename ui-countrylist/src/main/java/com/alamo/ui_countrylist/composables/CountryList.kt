@@ -1,4 +1,4 @@
-package com.alamo.ui_countrylist.ui
+package com.alamo.ui_countrylist.composables
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,10 +11,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.alamo.country_domain.Country
 import com.alamo.jc_ui_components.GenericDialog
 import com.alamo.jc_ui_components.Loader
-import com.alamo.ui_countrylist.composables.CountryCard
+import com.alamo.ui_countrylist.ui.CountryListEvents
+import com.alamo.ui_countrylist.ui.CountryListState
 
 @Composable
 fun CountryList(

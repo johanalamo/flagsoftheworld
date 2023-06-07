@@ -1,8 +1,10 @@
-package com.alamo.ui_countrylist.ui
+package com.alamo.ui_countrylist.composables
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.alamo.country_domain.Country
+import com.alamo.ui_countrylist.ui.CountryListEvents
+import com.alamo.ui_countrylist.ui.CountryListState
 
 @Composable
 @Preview

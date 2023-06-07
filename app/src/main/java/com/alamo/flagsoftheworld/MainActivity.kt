@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import com.alamo.flagsoftheworld.ui.theme.FlagsOfTheWorldTheme
 import com.alamo.country_datasource.network.CountryService
 import com.alamo.country_interactors.GetCountriesUseCase
+import com.alamo.ui_countrylist.composables.CountryList
 import com.alamo.ui_countrylist.ui.*
 
 //decidido.. a usar dos
