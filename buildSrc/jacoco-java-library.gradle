@@ -7,8 +7,10 @@ jacoco {
 project.ext.minimumCoverage = 0.75
 
 project.ext.excludes = [
-//        '**/composables/*.*',
-//        '**/BuildConfig*.*',
+        // Nothing to exclude, wildcards can be used (* and ?), examples:
+        //        '*composables*',
+        //        '*?iew?odel*',
+        //        '*BuildConfig*',
 ]
 
 project.getTasks().findByName("jacocoTestReport").dependsOn("test")

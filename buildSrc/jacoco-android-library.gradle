@@ -24,8 +24,12 @@ project.ext.jacocoGroup = "Reporting"
 
 // classes to exclude from coverage tasks
 project.ext.excludes = [
-        '**/composables/*.*',
-        '**/BuildConfig*.*',
+        // Wildcards can be used (* and ?), examples:
+        //        '*composables*',
+        //        '*?iew?odel*',
+        //        '*BuildConfig*',
+        '*composables*',
+        '*BuildConfig*',
 ]
 
 // Implementation section **************************************************************************

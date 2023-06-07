@@ -45,7 +45,6 @@ class GetCountriesUseCaseTest {
         Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
-
     @Test
     fun  `execute() SHOULD return a country list WHEN it is connected`() = runTest {
         // GIVEN
