@@ -132,6 +132,9 @@ def createVariantCoverage(variant) {
         it.group = project.ext.jacocoGroup
         it.description = "Verifies Jacoco coverage for the ${variantName.capitalize()} build."
         violationRules {
+
+            failOnViolation = true
+
             rule {
                 // it could be 'SOURCEFILE', 'BUNDLE', 'CLASS', 'PACKAGE', 'METHOD'
                 element = 'CLASS'

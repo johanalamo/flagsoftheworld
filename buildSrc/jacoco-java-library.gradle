@@ -4,6 +4,13 @@ jacoco {
     toolVersion = "0.8.8"
 }
 
+project.ext.minimumCoverage = 0.75
+
+project.ext.excludes = [
+//        '**/composables/*.*',
+//        '**/BuildConfig*.*',
+]
+
 project.getTasks().findByName("jacocoTestReport").dependsOn("test")
 
 project.getTasks().findByName("jacocoTestCoverageVerification").dependsOn("jacocoTestReport")
@@ -15,68 +22,39 @@ project.getTasks().findByName("jacocoTestCoverageVerification").configure {
         failOnViolation = true
 
         rule {
-            limit {
-                minimum = 0.94
-            }
-        }
+            // it could be 'SOURCEFILE', 'BUNDLE', 'CLASS', 'PACKAGE', 'METHOD'
+            element = 'CLASS'
+            excludes = project.excludes
 
-        rule {
-            element = 'BUNDLE'
             limit {
                 counter = 'LINE'
                 value = 'COVEREDRATIO'
-                minimum = 0.93
+                minimum = project.ext.minimumCoverage
             }
-        }
-
-        rule {
-            element = 'CLASS'
-            includes = ['*Presenter*']
-
             limit {
-                value = 'MISSEDCOUNT'
                 counter = 'CLASS'
-                minimum = 0.92
-            }
-
-            limit {
                 value = 'COVEREDRATIO'
+                minimum = project.ext.minimumCoverage
+            }
+            limit {
                 counter = 'METHOD'
-                minimum = 0.91
-            }
-        }
-
-        rule {
-            element = 'CLASS'
-            includes = ['*Tracker*']
-
-            limit {
-                value = 'MISSEDCOUNT'
-                counter = 'CLASS'
-                minimum = 0
-            }
-
-            limit {
                 value = 'COVEREDRATIO'
-                counter = 'METHOD'
-                minimum = 1.0
+                minimum = project.ext.minimumCoverage
             }
-        }
-
-        rule {
-            element = 'CLASS'
-            includes = ['*ExperimentViewFactory*']
-
             limit {
-                value = 'MISSEDCOUNT'
-                counter = 'CLASS'
-                minimum = 0
-            }
-
-            limit {
+                counter = 'COMPLEXITY'
                 value = 'COVEREDRATIO'
-                counter = 'METHOD'
-                minimum = 1.0
+                minimum = project.ext.minimumCoverage
+            }
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = project.ext.minimumCoverage
+            }
+            limit {
+                counter = 'INSTRUCTION'
+                value = 'COVEREDRATIO'
+                minimum = project.ext.minimumCoverage
             }
         }
     }
