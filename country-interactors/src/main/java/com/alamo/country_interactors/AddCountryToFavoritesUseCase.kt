@@ -27,9 +27,6 @@ class AddCountryToFavoritesUseCase(
                 e.printStackTrace()
                 emit(DataState.Error(999, "network error"))
             }
-        }.catch {
-            // TODO: check how it works, it is returning a unstable Flow
-            it.printStackTrace()
         }
     }
 }

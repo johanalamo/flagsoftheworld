@@ -30,9 +30,6 @@ class GetCountriesUseCase(
                 e.printStackTrace(System.err)
                 emit(DataState.Error(code = 101, description = "No connection"))
             }
-        }.catch {
-            it.printStackTrace(System.err)
-            emit(DataState.Error(code = 102, description = "No connection"))
         }
     }
 }
