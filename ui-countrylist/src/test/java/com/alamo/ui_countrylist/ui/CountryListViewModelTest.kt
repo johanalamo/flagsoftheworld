@@ -7,17 +7,21 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.Before
 import org.junit.Test
+import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.whenever
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class CountryListViewModelTest {
@@ -131,24 +135,17 @@ internal class CountryListViewModelTest {
         whenever(getCountriesUseCaseFake.execute()).thenReturn(flow {
             emit(DataState.Success<List<Country>>(data = countryList))
         })
-        whenever(addCountryToFavoritesUseCaseFake.execute()).thenReturn(flow {
+        whenever(addCountryToFavoritesUseCaseFake.execute(anyString())).thenReturn(flow {
+            emit(DataState.Loading)
             emit(DataState.Success<Nothing>())
         })
+        classUnderTest.onTriggerEvent(CountryListEvents.GetCountries)
 
         // WHEN
-        classUnderTest.onTriggerEvent(CountryListEvents.GetCountries)
-        delay(1000)
         classUnderTest.onTriggerEvent(CountryListEvents.AddCountryToFavorites(newFavorite))
 
-        println("avilan: size: " + classUnderTest.state.value.list.size)
-
-        classUnderTest.state.value.list.forEach {
-            println("avilan element: " + it)
-        }
         // THEN
-        assertFalse(
-            classUnderTest.state.value.list.first { it.codeISO3 == newFavorite }.isFavorite
-        )
+        assertTrue(classUnderTest.state.value.list.first { it.codeISO3 == newFavorite }.isFavorite)
     }
 
     @Test
