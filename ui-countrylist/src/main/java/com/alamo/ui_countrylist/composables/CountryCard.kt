@@ -1,6 +1,7 @@
 package com.alamo.ui_countrylist.composables
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -22,7 +23,9 @@ fun CountryCard(
     population: Long?,
     capital: List<String>?,
     isFavorite: Boolean,
-    onClick: () -> Unit,
+    onClick: () -> Unit? = { null},
+    addToFavorites: () -> Unit? = {null},
+    removeFromFavorites: () -> Unit? = {null},
 ) {
     Card(
         modifier = Modifier
@@ -58,9 +61,17 @@ fun CountryCard(
                     horizontalAlignment = Alignment.End
                 ) {
                     if (isFavorite) {
-                        Icon(PersonalizedIcons.IsFavorite, contentDescription = "",)
+                        // TODO: this button should be replaced by another thing
+                        Button(onClick = { removeFromFavorites() }) {
+                            Icon(
+                                PersonalizedIcons.IsFavorite,
+                                contentDescription = ""
+                            )
+                        }
                     } else {
-                        Icon(PersonalizedIcons.IsNotFavorite, contentDescription = "",)
+                        Button(onClick = { addToFavorites() }) {
+                            Icon(PersonalizedIcons.IsNotFavorite, contentDescription = "",)
+                        }
                     }
                 }
             }

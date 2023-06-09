@@ -5,6 +5,7 @@ import com.alamo.country_domain.Country
 import com.alamo.country_interactors.UseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -15,6 +16,7 @@ import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.whenever
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -24,6 +26,12 @@ internal class CountryListViewModelTest {
 
     @Mock
     private lateinit var getCountriesUseCaseFake: UseCase
+
+    @Mock
+    private lateinit var addCountryToFavoritesUseCaseFake: UseCase
+
+    @Mock
+    private lateinit var removeCountryFromFavoritesUseCaseFake: UseCase
 
     private val testDispatcher = UnconfinedTestDispatcher()
 
@@ -39,7 +47,12 @@ internal class CountryListViewModelTest {
     fun setup() {
         MockitoAnnotations.openMocks(this)
 
-        classUnderTest = CountryListViewModel(getCountriesUseCaseFake, dispatcher = testDispatcher)
+        classUnderTest = CountryListViewModel(
+            getCountriesUseCase = getCountriesUseCaseFake,
+            addCountryToFavoritesUseCase = addCountryToFavoritesUseCaseFake,
+            removeCountryFromFavoritesUseCase = removeCountryFromFavoritesUseCaseFake,
+            dispatcher = testDispatcher,
+        )
 
         Dispatchers.setMain(testDispatcher)
     }
@@ -107,6 +120,35 @@ internal class CountryListViewModelTest {
 
         // THEN
         assertEquals(true, classUnderTest.state.value.isLoading)
+    }
+
+    // TODO: fix, this test is not working
+    @Test
+    fun `onTriggerEvent(AddCountryToFavorites) SHOULD add the country and update the list`() = runTest {
+        val newFavorite = "URY"
+
+        // GIVEN
+        whenever(getCountriesUseCaseFake.execute()).thenReturn(flow {
+            emit(DataState.Success<List<Country>>(data = countryList))
+        })
+        whenever(addCountryToFavoritesUseCaseFake.execute()).thenReturn(flow {
+            emit(DataState.Success<Nothing>())
+        })
+
+        // WHEN
+        classUnderTest.onTriggerEvent(CountryListEvents.GetCountries)
+        delay(1000)
+        classUnderTest.onTriggerEvent(CountryListEvents.AddCountryToFavorites(newFavorite))
+
+        println("avilan: size: " + classUnderTest.state.value.list.size)
+
+        classUnderTest.state.value.list.forEach {
+            println("avilan element: " + it)
+        }
+        // THEN
+        assertFalse(
+            classUnderTest.state.value.list.first { it.codeISO3 == newFavorite }.isFavorite
+        )
     }
 
     @Test

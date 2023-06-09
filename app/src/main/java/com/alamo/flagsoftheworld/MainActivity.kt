@@ -10,12 +10,11 @@ import com.alamo.country_datasource.cache.CountryCacheImpl
 import com.alamo.country_datasource.cache.CountryDatabase
 import com.alamo.flagsoftheworld.ui.theme.FlagsOfTheWorldTheme
 import com.alamo.country_datasource.network.CountryService
+import com.alamo.country_interactors.AddCountryToFavoritesUseCase
 import com.alamo.country_interactors.GetCountriesUseCase
+import com.alamo.country_interactors.RemoveCountryFromFavoritesUseCase
 import com.alamo.ui_countrylist.composables.CountryList
 import com.alamo.ui_countrylist.ui.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.launch
 
 //decidido.. a usar dos
 //info about countries: https://restcountries.com/
@@ -100,9 +99,14 @@ class MainActivity : ComponentActivity() {
             getCountriesUseCase = GetCountriesUseCase(
                 countryService = CountryService.build() ,
                 countryCache = countryDatabase,
-            )
+            ),
+            addCountryToFavoritesUseCase = AddCountryToFavoritesUseCase(
+                countryCache = countryDatabase,
+            ),
+            removeCountryFromFavoritesUseCase = RemoveCountryFromFavoritesUseCase(
+                countryCache = countryDatabase,
+            ),
         )
-        testingCache()
         setContent {
             viewModel.onTriggerEvent(CountryListEvents.GetCountries)
             FlagsOfTheWorldTheme {
@@ -112,46 +116,6 @@ class MainActivity : ComponentActivity() {
                     events = viewModel::onTriggerEvent,
                 )
             }
-        }
-    }
-
-    private fun testingCache() {
-
-        val driver: SqlDriver = AndroidSqliteDriver(CountryDatabase.Schema, this, "test.db")
-
-        val countryDb = CountryDatabase(
-            driver
-        )
-        val countryDatabase = CountryCacheImpl(
-            countryDb
-        )
-
-        CoroutineScope(IO).launch {
-            countryDatabase.removeAllFavorites()
-
-            countryDatabase.addToFavorites("MNP")
-            countryDatabase.addToFavorites("AND")
-            var country = "VEN"
-            println("alamo2 inserting $country: " + countryDatabase.addToFavorites(country))
-
-            country = "COl"
-            println("alamo2 inserting $country: " + countryDatabase.addToFavorites(country))
-
-            country = "ARG"
-            println("alamo2 inserting $country: " + countryDatabase.addToFavorites(country))
-            println("alamo2 existe $country: " + countryDatabase.isFavorite(country))
-
-            country = "ARg"
-            println("alamo2 existe $country: " + countryDatabase.isFavorite(country))
-            println("alamo2 removing $country: " + countryDatabase.removeFromFavorites(country))
-
-            println("alamo2 removing $country: " + countryDatabase.removeFromFavorites(country))
-            println("alamo2 existe $country: " + countryDatabase.isFavorite(country))
-
-            val res2 = countryDatabase.getFavoriteCountries()
-
-            println("alamo2 count: " + res2.size)
-            println("alamo2 elements: $res2")
         }
     }
 }

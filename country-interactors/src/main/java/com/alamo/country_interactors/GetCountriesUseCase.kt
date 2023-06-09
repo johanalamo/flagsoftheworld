@@ -5,14 +5,16 @@ import com.alamo.country_datasource.cache.CountryCache
 import com.alamo.country_datasource.network.CountryService
 import com.alamo.country_datasource.network.model.toCountry
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 
 class GetCountriesUseCase(
     private val countryService: CountryService,
     private val countryCache: CountryCache,
 ) : UseCase {
+    // TODO: it must be improved and exceptions should be tested
 
-    override fun execute(): Flow<DataState> {
+    override fun execute(vararg parameters: String): Flow<DataState> {
         return flow {
             try {
                 emit(DataState.Loading)
@@ -28,6 +30,9 @@ class GetCountriesUseCase(
                 e.printStackTrace(System.err)
                 emit(DataState.Error(code = 101, description = "No connection"))
             }
+        }.catch {
+            it.printStackTrace(System.err)
+            emit(DataState.Error(code = 102, description = "No connection"))
         }
     }
 }

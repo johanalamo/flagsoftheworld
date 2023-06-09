@@ -58,9 +58,16 @@ fun CountryList(
                                 population = country.population,
                                 capital = country.capital,
                                 isFavorite = country.isFavorite,
-                            ) {
-
-                            }
+                                onClick = {
+                                    println("avilan: click on country: " + country.name)
+                                },
+                                addToFavorites = {
+                                    events(CountryListEvents.AddCountryToFavorites(country.codeISO3))
+                                },
+                                removeFromFavorites = {
+                                    events(CountryListEvents.RemoveCountryFromFavorites(country.codeISO3))
+                                }
+                            )
                         }
                     }
                 }

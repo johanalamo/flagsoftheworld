@@ -2,23 +2,34 @@ package com.alamo.country_interactors
 
 import com.alamo.core.domain.DataState
 import com.alamo.country_datasource.cache.CountryCache
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import java.lang.Exception
 
 class AddCountryToFavoritesUseCase(
     private val countryCache: CountryCache
-) {
-    fun execute(countryCode: String): Flow<DataState> {
+) : UseCase {
+    // TODO: it must be improved and exceptions should be tested
+    override fun execute(vararg parameters: String): Flow<DataState> {
         return flow {
-            emit(DataState.Loading)
             try {
-                countryCache.addToFavorites(countryCode = countryCode)
-                emit(DataState.Success<Nothing>())
+                emit(DataState.Loading)
+                val countryCode = parameters[0]
+                val res = countryCache.addToFavorites(countryCode = countryCode)
+                if (res) {
+                    emit(DataState.Success<Nothing>())
+                } else {
+                    emit(DataState.Error(980, "error adding the favorite"))
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
                 emit(DataState.Error(999, "network error"))
             }
+        }.catch {
+            // TODO: check how it works, it is returning a unstable Flow
+            it.printStackTrace()
         }
     }
 }
