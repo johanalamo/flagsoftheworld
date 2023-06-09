@@ -17,12 +17,8 @@ class AddCountryToFavoritesUseCase(
             try {
                 emit(DataState.Loading)
                 val countryCode = parameters[0]
-                val res = countryCache.addToFavorites(countryCode = countryCode)
-                if (res) {
-                    emit(DataState.Success<Nothing>())
-                } else {
-                    emit(DataState.Error(980, "error adding the favorite"))
-                }
+                countryCache.addToFavorites(countryCode = countryCode)
+                emit(DataState.Success<Nothing>())
             } catch (e: Exception) {
                 e.printStackTrace()
                 emit(DataState.Error(999, "network error"))

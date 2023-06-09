@@ -3,12 +3,10 @@ package com.alamo.ui_countrylist.ui
 import androidx.lifecycle.ViewModel
 import com.alamo.core.domain.DataState
 import com.alamo.country_domain.Country
-import com.alamo.country_interactors.AddCountryToFavoritesUseCase
 import com.alamo.country_interactors.UseCase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 
 class CountryListViewModel(
@@ -72,6 +70,7 @@ class CountryListViewModel(
                         _state.update { it.copy(isLoading = true) }
                     }
                     is DataState.Success<*> -> {
+                        // TODO: it should be refactored
                         var mutableList = _state.value.list.map { it }
                         val pos = mutableList.indexOfFirst { it.codeISO3 == countryCode }
                         mutableList[pos].isFavorite = true
@@ -95,6 +94,7 @@ class CountryListViewModel(
                         _state.update { it.copy(isLoading = true) }
                     }
                     is DataState.Success<*> -> {
+                        // TODO: it should be refactored
                         var mutableList = _state.value.list.map { it }
                         val pos = mutableList.indexOfFirst { it.codeISO3 == countryCode }
                         mutableList[pos].isFavorite = false
