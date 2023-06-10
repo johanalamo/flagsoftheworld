@@ -48,7 +48,7 @@ class AddCountryToFavoritesUseCaseTest {
     fun `execute() SHOULD return a error WHEN an error occurs trying to add as favorite`() =
         runTest {
             // GIVEN
-            whenever(countryCache.addToFavorites(any())).thenThrow()
+            whenever(countryCache.addToFavorites(any())).thenReturn(false)
 
             // WHEN
             val emissions = mutableListOf<DataState>()

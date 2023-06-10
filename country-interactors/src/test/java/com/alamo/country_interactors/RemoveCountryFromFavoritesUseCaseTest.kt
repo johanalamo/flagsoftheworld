@@ -49,7 +49,7 @@ class RemoveCountryFromFavoritesUseCaseTest {
     fun `execute() SHOULD return a error WHEN an error occurs trying to remove from favorites`() =
         runTest {
             // GIVEN
-            whenever(countryCache.removeFromFavorites(any())).thenThrow()
+            whenever(countryCache.removeFromFavorites(any())).thenReturn(false)
 
             // WHEN
             val emissions = mutableListOf<DataState>()
