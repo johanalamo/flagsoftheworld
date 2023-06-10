@@ -14,13 +14,11 @@ class AddCountryToFavoritesUseCase(
     // TODO: it must be improved and exceptions should be tested
     override fun execute(vararg parameters: String): Flow<DataState> {
         return flow {
-            try {
-                emit(DataState.Loading)
-                val countryCode = parameters[0]
-                countryCache.addToFavorites(countryCode = countryCode)
+            emit(DataState.Loading)
+            val countryCode = parameters[0]
+            if (countryCache.addToFavorites(countryCode = countryCode)) {
                 emit(DataState.Success<Nothing>())
-            } catch (e: Exception) {
-                e.printStackTrace()
+            } else {
                 emit(DataState.Error(999, "network error"))
             }
         }

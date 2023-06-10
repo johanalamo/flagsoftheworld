@@ -13,11 +13,9 @@ class RemoveCountryFromFavoritesUseCase(
         return flow {
             val countryCode = parameters[0]
             emit(DataState.Loading)
-            try {
-                countryCache.removeFromFavorites(countryCode)
+            if (countryCache.removeFromFavorites(countryCode)) {
                 emit(DataState.Success<Nothing>())
-            } catch (e: Exception) {
-                e.printStackTrace()
+            } else {
                 emit(DataState.Error(999, "network error"))
             }
         }
