@@ -5,10 +5,7 @@ import com.alamo.country_domain.Country
 import com.alamo.country_interactors.UseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -41,7 +38,7 @@ internal class CountryListViewModelTest {
 
     // Helper values
     val countryList = listOf<Country>(
-        Country(name = "Venezuela", codeISO3 = "VEN", capital = listOf("Caracas")),
+        Country(name = "Venezuela", codeISO3 = "VEN", capital = listOf("Caracas"), isFavorite = true),
         Country(name = "Argentina", codeISO3 = "ARG", capital = listOf("Buenos Aires")),
         Country(name = "Uruguay", codeISO3 = "URY", capital = listOf("Montevideo")),
     )
@@ -126,7 +123,6 @@ internal class CountryListViewModelTest {
         assertEquals(true, classUnderTest.state.value.isLoading)
     }
 
-    // TODO: fix, this test is not working
     @Test
     fun `onTriggerEvent(AddCountryToFavorites) SHOULD add the country and update the list`() = runTest {
         val newFavorite = "URY"
@@ -146,6 +142,69 @@ internal class CountryListViewModelTest {
 
         // THEN
         assertTrue(classUnderTest.state.value.list.first { it.codeISO3 == newFavorite }.isFavorite)
+    }
+
+
+    @Test
+    fun `onTriggerEvent(AddCountryToFavorites) SHOULD hide the loader WHEN an error occurs `() = runTest {
+        val newFavorite = "URY"
+
+        // GIVEN
+        whenever(getCountriesUseCaseFake.execute()).thenReturn(flow {
+            emit(DataState.Success<List<Country>>(data = countryList))
+        })
+        whenever(addCountryToFavoritesUseCaseFake.execute(anyString())).thenReturn(flow {
+            emit(DataState.Loading)
+            emit(DataState.Error(1, "any error"))
+        })
+        classUnderTest.onTriggerEvent(CountryListEvents.GetCountries)
+
+        // WHEN
+        classUnderTest.onTriggerEvent(CountryListEvents.AddCountryToFavorites(newFavorite))
+
+        // THEN
+        assertFalse(classUnderTest.state.value.isLoading)
+    }
+
+    @Test
+    fun `onTriggerEvent(RemoveCountryFromFavorites) SHOULD remove the country and update the list`() = runTest {
+        val countryToRemove = "VEN"
+
+        // GIVEN
+        whenever(getCountriesUseCaseFake.execute()).thenReturn(flow {
+            emit(DataState.Success<List<Country>>(data = countryList))
+        })
+        whenever(removeCountryFromFavoritesUseCaseFake.execute(anyString())).thenReturn(flow {
+            emit(DataState.Loading)
+            emit(DataState.Success<Nothing>())
+        })
+        classUnderTest.onTriggerEvent(CountryListEvents.GetCountries)
+
+        // WHEN
+        classUnderTest.onTriggerEvent(CountryListEvents.RemoveCountryFromFavorites(countryToRemove))
+
+        // THEN
+        assertFalse(classUnderTest.state.value.list.first { it.codeISO3 == countryToRemove }.isFavorite)
+    }
+    @Test
+    fun `onTriggerEvent(RemoveCountryFromFavorites) SHOULD hide loader WHEN an error happens`() = runTest {
+        val countryToRemove = "VEN"
+
+        // GIVEN
+        whenever(getCountriesUseCaseFake.execute()).thenReturn(flow {
+            emit(DataState.Success<List<Country>>(data = countryList))
+        })
+        whenever(removeCountryFromFavoritesUseCaseFake.execute(anyString())).thenReturn(flow {
+            emit(DataState.Loading)
+            emit(DataState.Error(1, "any error"))
+        })
+        classUnderTest.onTriggerEvent(CountryListEvents.GetCountries)
+
+        // WHEN
+        classUnderTest.onTriggerEvent(CountryListEvents.RemoveCountryFromFavorites(countryToRemove))
+
+        // THEN
+        assertFalse(classUnderTest.state.value.isLoading)
     }
 
     @Test
