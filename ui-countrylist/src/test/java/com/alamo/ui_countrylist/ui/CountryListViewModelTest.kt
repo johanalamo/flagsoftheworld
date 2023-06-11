@@ -66,7 +66,7 @@ internal class CountryListViewModelTest {
         })
 
         // WHEN
-        classUnderTest.onTriggerEvent(CountryListEvents.GetCountries)
+        classUnderTest.onTriggerEvent(CountryListUserEvents.GetCountries)
 
         // THEN
         assertEquals(
@@ -83,7 +83,7 @@ internal class CountryListViewModelTest {
         })
 
         // WHEN
-        classUnderTest.onTriggerEvent(CountryListEvents.GetCountries)
+        classUnderTest.onTriggerEvent(CountryListUserEvents.GetCountries)
 
         // THEN
         assertEquals(
@@ -100,7 +100,7 @@ internal class CountryListViewModelTest {
         })
 
         // WHEN
-        classUnderTest.onTriggerEvent(CountryListEvents.GetCountries)
+        classUnderTest.onTriggerEvent(CountryListUserEvents.GetCountries)
 
         // THEN
         assertEquals(
@@ -117,7 +117,7 @@ internal class CountryListViewModelTest {
         })
 
         // WHEN
-        classUnderTest.onTriggerEvent(CountryListEvents.GetCountries)
+        classUnderTest.onTriggerEvent(CountryListUserEvents.GetCountries)
 
         // THEN
         assertEquals(true, classUnderTest.state.value.isLoading)
@@ -135,10 +135,10 @@ internal class CountryListViewModelTest {
             emit(DataState.Loading)
             emit(DataState.Success<Nothing>())
         })
-        classUnderTest.onTriggerEvent(CountryListEvents.GetCountries)
+        classUnderTest.onTriggerEvent(CountryListUserEvents.GetCountries)
 
         // WHEN
-        classUnderTest.onTriggerEvent(CountryListEvents.AddCountryToFavorites(newFavorite))
+        classUnderTest.onTriggerEvent(CountryListUserEvents.AddUserCountryToFavorites(newFavorite))
 
         // THEN
         assertTrue(classUnderTest.state.value.list.first { it.codeISO3 == newFavorite }.isFavorite)
@@ -157,10 +157,10 @@ internal class CountryListViewModelTest {
             emit(DataState.Loading)
             emit(DataState.Error(1, "any error"))
         })
-        classUnderTest.onTriggerEvent(CountryListEvents.GetCountries)
+        classUnderTest.onTriggerEvent(CountryListUserEvents.GetCountries)
 
         // WHEN
-        classUnderTest.onTriggerEvent(CountryListEvents.AddCountryToFavorites(newFavorite))
+        classUnderTest.onTriggerEvent(CountryListUserEvents.AddUserCountryToFavorites(newFavorite))
 
         // THEN
         assertFalse(classUnderTest.state.value.isLoading)
@@ -178,10 +178,10 @@ internal class CountryListViewModelTest {
             emit(DataState.Loading)
             emit(DataState.Success<Nothing>())
         })
-        classUnderTest.onTriggerEvent(CountryListEvents.GetCountries)
+        classUnderTest.onTriggerEvent(CountryListUserEvents.GetCountries)
 
         // WHEN
-        classUnderTest.onTriggerEvent(CountryListEvents.RemoveCountryFromFavorites(countryToRemove))
+        classUnderTest.onTriggerEvent(CountryListUserEvents.RemoveUserCountryFromFavorites(countryToRemove))
 
         // THEN
         assertFalse(classUnderTest.state.value.list.first { it.codeISO3 == countryToRemove }.isFavorite)
@@ -198,10 +198,10 @@ internal class CountryListViewModelTest {
             emit(DataState.Loading)
             emit(DataState.Error(1, "any error"))
         })
-        classUnderTest.onTriggerEvent(CountryListEvents.GetCountries)
+        classUnderTest.onTriggerEvent(CountryListUserEvents.GetCountries)
 
         // WHEN
-        classUnderTest.onTriggerEvent(CountryListEvents.RemoveCountryFromFavorites(countryToRemove))
+        classUnderTest.onTriggerEvent(CountryListUserEvents.RemoveUserCountryFromFavorites(countryToRemove))
 
         // THEN
         assertFalse(classUnderTest.state.value.isLoading)
@@ -215,7 +215,7 @@ internal class CountryListViewModelTest {
         })
 
         // WHEN
-        classUnderTest.onTriggerEvent(CountryListEvents.CloseErrorDialog)
+        classUnderTest.onTriggerEvent(CountryListUserEvents.CloseErrorDialog)
 
         // THEN
         assertNull( classUnderTest.state.value.error)

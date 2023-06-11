@@ -21,12 +21,12 @@ class CountryListViewModel(
     val state
         get() = _state.asStateFlow()
 
-    fun onTriggerEvent(events: CountryListEvents) {
+    fun onTriggerEvent(events: CountryListUserEvents) {
         when (events) {
-            is CountryListEvents.GetCountries -> getCountries()
-            is CountryListEvents.CloseErrorDialog -> _state.update { it.copy(error = null) }
-            is CountryListEvents.AddCountryToFavorites -> addCountryToFavorites(events.countryCode)
-            is CountryListEvents.RemoveCountryFromFavorites -> removeFromFavorites(events.countryCode)
+            is CountryListUserEvents.GetCountries -> getCountries()
+            is CountryListUserEvents.CloseErrorDialog -> _state.update { it.copy(error = null) }
+            is CountryListUserEvents.AddUserCountryToFavorites -> addCountryToFavorites(events.countryCode)
+            is CountryListUserEvents.RemoveUserCountryFromFavorites -> removeFromFavorites(events.countryCode)
         }
     }
 
