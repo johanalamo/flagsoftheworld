@@ -108,12 +108,12 @@ class MainActivity : ComponentActivity() {
             ),
         )
         setContent {
-            viewModel.onTriggerEvent(CountryListUserEvents.GetCountries)
+            viewModel.triggerEvent(CountryListEvents.GetCountries)
             FlagsOfTheWorldTheme {
                 // A surface container using the 'background' color from the theme
                 CountryList(
                     state = viewModel.state.collectAsState().value,
-                    events = viewModel::onTriggerEvent,
+                    events = viewModel::triggerEvent,
                 )
             }
         }

@@ -13,13 +13,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.alamo.jc_ui_components.GenericDialog
 import com.alamo.jc_ui_components.Loader
-import com.alamo.ui_countrylist.ui.CountryListUserEvents
+import com.alamo.ui_countrylist.ui.CountryListEvents
 import com.alamo.ui_countrylist.ui.CountryListState
 
 @Composable
 fun CountryList(
     state: CountryListState,
-    events: (CountryListUserEvents) -> Unit,
+    events: (CountryListEvents) -> Unit,
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -32,12 +32,12 @@ fun CountryList(
                     description = "Error trying to get the contry list from the network: "
                             + state.error.second,
                     onConfirm = {
-                        events(CountryListUserEvents.CloseErrorDialog)
-                        events(CountryListUserEvents.GetCountries)
+                        events(CountryListEvents.CloseErrorDialog)
+                        events(CountryListEvents.GetCountries)
                     },
                     onConfirmText = "Retry",
                     onDismiss = {
-                        events(CountryListUserEvents.CloseErrorDialog)
+                        events(CountryListEvents.CloseErrorDialog)
                     },
                     onDismissText = "Cancel"
                 )
@@ -62,10 +62,10 @@ fun CountryList(
                                     println("avilan: click on country: " + country.name)
                                 },
                                 addToFavorites = {
-                                    events(CountryListUserEvents.AddUserCountryToFavorites(country.codeISO3))
+                                    events(CountryListEvents.AddUserCountryToFavorites(country.codeISO3))
                                 },
                                 removeFromFavorites = {
-                                    events(CountryListUserEvents.RemoveUserCountryFromFavorites(country.codeISO3))
+                                    events(CountryListEvents.RemoveUserCountryFromFavorites(country.codeISO3))
                                 }
                             )
                         }

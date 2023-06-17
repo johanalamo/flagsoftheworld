@@ -3,13 +3,13 @@ package com.alamo.ui_countrylist.composables
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.alamo.country_domain.Country
-import com.alamo.ui_countrylist.ui.CountryListUserEvents
+import com.alamo.ui_countrylist.ui.CountryListEvents
 import com.alamo.ui_countrylist.ui.CountryListState
 
 @Composable
 @Preview
 fun CountryListThreeElementsPreview() {
-    val myLambda: (CountryListUserEvents) -> Unit = { s: CountryListUserEvents -> println(s) }
+    val myLambda: (CountryListEvents) -> Unit = { s: CountryListEvents -> println(s) }
     CountryList(
         state = CountryListState(
             isLoading = false,
@@ -27,7 +27,7 @@ fun CountryListThreeElementsPreview() {
 @Composable
 @Preview
 fun CountryListErrorPreview() {
-    val myLambda: (CountryListUserEvents) -> Unit = { s: CountryListUserEvents -> println(s) }
+    val myLambda: (CountryListEvents) -> Unit = { s: CountryListEvents -> println(s) }
     CountryList(
         state = CountryListState(
             isLoading = false,
@@ -45,7 +45,7 @@ fun CountryListErrorPreview() {
 @Composable
 @Preview
 fun CountryListLoadingPreview() {
-    val myLambda: (CountryListUserEvents) -> Unit = { s: CountryListUserEvents -> println(s) }
+    val myLambda: (CountryListEvents) -> Unit = { s: CountryListEvents -> println(s) }
     CountryList(
         state = CountryListState(
             isLoading = true,
