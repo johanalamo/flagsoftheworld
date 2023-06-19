@@ -28,11 +28,11 @@ class CountryListViewModel(
             is CountryListEvents.GetCountries -> getCountries()
             is CountryListEvents.DismissTopMessage -> _state.update {
                 // TODO: refactor, check if we can avoid to duplicate the list
-                val newMessages: LinkedList<Message> = LinkedList<Message>(_state.value.error.toList())
+                val newMessages: LinkedList<Message> = LinkedList<Message>(_state.value.messages.toList())
                 if (newMessages.isNotEmpty()) {
                     newMessages.remove()
                 }
-                it.copy(error = newMessages)
+                it.copy(messages = newMessages)
             }
 
             is CountryListEvents.AddUserCountryToFavorites -> addCountryToFavorites(events.countryCode)
@@ -63,14 +63,14 @@ class CountryListViewModel(
 
                     is DataState.Error -> {
                         // TODO: it should be refactored
-                        val newMessages: LinkedList<Message> = LinkedList<Message>(_state.value.error.toList())
+                        val newMessages: LinkedList<Message> = LinkedList<Message>(_state.value.messages.toList())
                         newMessages.add(
                             when (dataState.code) {
                                 101 -> Message.NoInternetConnection
                                 else -> Message.UnknownError
                             }
                         )
-                        _state.update { it.copy(error = newMessages, isLoading = false) }
+                        _state.update { it.copy(messages = newMessages, isLoading = false) }
                     }
                 }
             }
@@ -90,18 +90,18 @@ class CountryListViewModel(
                         var mutableList = _state.value.list.map { it }
                         val pos = mutableList.indexOfFirst { it.codeISO3 == countryCode }
                         mutableList[pos].isFavorite = true
-                        var messages: LinkedList<Message> = LinkedList(_state.value.error)
+                        var messages: LinkedList<Message> = LinkedList(_state.value.messages)
                         messages.add(Message.AddedToFavorites(countryCode))
                         _state.update { it.copy(
                             list = mutableList,
                             isLoading = false,
-                            error = messages,
+                            messages = messages,
                         ) }
                     }
                     is DataState.Error -> {
-                        var messages: LinkedList<Message> = LinkedList(_state.value.error)
+                        var messages: LinkedList<Message> = LinkedList(_state.value.messages)
                         messages.add(Message.AddToFavoritesFailed(countryCode))
-                        _state.update { it.copy(isLoading = false, error = messages) }
+                        _state.update { it.copy(isLoading = false, messages = messages) }
                     }
                 }
             }
@@ -123,18 +123,18 @@ class CountryListViewModel(
                         val pos = mutableList.indexOfFirst { it.codeISO3 == countryCode }
                         mutableList[pos].isFavorite = false
 
-                        var messages: LinkedList<Message> = LinkedList(_state.value.error)
+                        var messages: LinkedList<Message> = LinkedList(_state.value.messages)
                         messages.add(Message.RemovedFromFavorites(countryCode))
                         _state.update { it.copy(
                             list = mutableList,
                             isLoading = false,
-                            error = messages
+                            messages = messages
                         ) }
                     }
                     is DataState.Error -> {
-                        var messages: LinkedList<Message> = LinkedList(_state.value.error)
+                        var messages: LinkedList<Message> = LinkedList(_state.value.messages)
                         messages.add(Message.RemoveFromFavoritesFailed(countryCode))
-                        _state.update { it.copy(isLoading = false, error = messages) }
+                        _state.update { it.copy(isLoading = false, messages = messages) }
                     }
                 }
             }

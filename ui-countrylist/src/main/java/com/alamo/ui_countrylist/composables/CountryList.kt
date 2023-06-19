@@ -29,8 +29,8 @@ fun CountryList(
         color = MaterialTheme.colorScheme.background
     ) {
         Box(modifier = Modifier) {
-            if (state.error.isNotEmpty()) {
-                when (state.error.first()) {
+            if (state.messages.isNotEmpty()) {
+                when (state.messages.first()) {
                     // TODO: add here toasts, snackbars and dialogs
                     is Message.NoInternetConnection -> {
                         GenericDialog(
@@ -66,7 +66,7 @@ fun CountryList(
 
                     is Message.AddToFavoritesFailed -> {
                         // TODO: replace with a snackbar
-                        val countryCode = (state.error.first() as Message.AddToFavoritesFailed).countryCode
+                        val countryCode = (state.messages.first() as Message.AddToFavoritesFailed).countryCode
                         val countryName = state.list.first { it.codeISO3 == countryCode }.name
                         val message = stringResource(id = R. string.country_add_failed, countryName)
                         println(message)
@@ -75,7 +75,7 @@ fun CountryList(
 
                     is Message.AddedToFavorites -> {
                         // TODO: replace with a snackbar
-                        val countryCode = (state.error.first() as Message.AddedToFavorites).countryCode
+                        val countryCode = (state.messages.first() as Message.AddedToFavorites).countryCode
                         val countryName = state.list.first { it.codeISO3 == countryCode }.name
                         val message = stringResource(id = R. string.country_added, countryName)
                         println(message)
@@ -84,7 +84,7 @@ fun CountryList(
 
                     is Message.RemoveFromFavoritesFailed -> {
                         // TODO: replace with a snackbar
-                        val countryCode = (state.error.first() as Message.RemoveFromFavoritesFailed).countryCode
+                        val countryCode = (state.messages.first() as Message.RemoveFromFavoritesFailed).countryCode
                         val countryName = state.list.first { it.codeISO3 == countryCode }.name
                         val message = stringResource(id = R. string.country_remove_failed, countryName)
                         println(message)
@@ -93,7 +93,7 @@ fun CountryList(
 
                     is Message.RemovedFromFavorites -> {
                         // TODO: replace with a snackbar
-                        val countryCode = (state.error.first() as Message.RemovedFromFavorites).countryCode
+                        val countryCode = (state.messages.first() as Message.RemovedFromFavorites).countryCode
                         val countryName = state.list.first { it.codeISO3 == countryCode }.name
                         val message = stringResource(id = R. string.country_removed, countryName)
                         println(message)

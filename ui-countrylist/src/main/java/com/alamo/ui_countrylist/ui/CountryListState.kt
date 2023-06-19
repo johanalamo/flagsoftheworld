@@ -8,9 +8,7 @@ import java.util.Queue
 data class CountryListState(
     var isLoading: Boolean = false,
     var list: List<Country> = listOf<Country>(),
-
-    // TODO: rename this field to messages
-    val error: Queue<Message> = LinkedList<Message>(),
+    val messages: Queue<Message> = LinkedList<Message>(),
 
     // var favorite list
     // showing: all/favorite

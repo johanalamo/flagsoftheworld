@@ -37,7 +37,7 @@ fun CountryListErrorPreview() {
                 Country(name = "Argentina", codeISO3 = "ARG", capital = listOf("Buenos Aires")),
                 Country(name = "Uruguay", codeISO3 = "URY", capital = listOf("Montevideo")),
             ),
-            error = LinkedList<Message>(listOf(Message.NoInternetConnection)),
+            messages = LinkedList<Message>(listOf(Message.NoInternetConnection)),
         ),
         events = myLambda,
     )

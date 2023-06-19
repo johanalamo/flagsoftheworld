@@ -20,7 +20,6 @@ import java.util.LinkedList
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -73,7 +72,7 @@ internal class CountryListViewModelTest {
 
         // THEN
         assertEquals(
-            CountryListState(list = countryList, error = LinkedList<Message>(), isLoading = false),
+            CountryListState(list = countryList, messages = LinkedList<Message>(), isLoading = false),
             classUnderTest.state.value
         )
     }
@@ -90,7 +89,7 @@ internal class CountryListViewModelTest {
 
         // THEN
         assertEquals(
-            CountryListState(list = emptyList(), error = LinkedList<Message>(listOf(Message.NoInternetConnection)), isLoading = false),
+            CountryListState(list = emptyList(), messages = LinkedList<Message>(listOf(Message.NoInternetConnection)), isLoading = false),
             classUnderTest.state.value
         )
     }
@@ -145,10 +144,10 @@ internal class CountryListViewModelTest {
 
         // THEN
         assertTrue(classUnderTest.state.value.list.first { it.codeISO3 == newFavorite }.isFavorite)
-        assertIs<Message.AddedToFavorites>(classUnderTest.state.value.error.first())
+        assertIs<Message.AddedToFavorites>(classUnderTest.state.value.messages.first())
         assertEquals(
             newFavorite,
-            (classUnderTest.state.value.error.first() as Message.AddedToFavorites).countryCode
+            (classUnderTest.state.value.messages.first() as Message.AddedToFavorites).countryCode
         )
     }
 
@@ -172,10 +171,10 @@ internal class CountryListViewModelTest {
 
         // THEN
         assertFalse(classUnderTest.state.value.isLoading)
-        assertIs<Message.AddToFavoritesFailed>(classUnderTest.state.value.error.first())
+        assertIs<Message.AddToFavoritesFailed>(classUnderTest.state.value.messages.first())
         assertEquals(
             newFavorite,
-            (classUnderTest.state.value.error.first() as Message.AddToFavoritesFailed).countryCode
+            (classUnderTest.state.value.messages.first() as Message.AddToFavoritesFailed).countryCode
         )
     }
 
@@ -198,10 +197,10 @@ internal class CountryListViewModelTest {
 
         // THEN
         assertFalse(classUnderTest.state.value.list.first { it.codeISO3 == countryToRemove }.isFavorite)
-        assertIs<Message.RemovedFromFavorites>(classUnderTest.state.value.error.first())
+        assertIs<Message.RemovedFromFavorites>(classUnderTest.state.value.messages.first())
         assertEquals(
             countryToRemove,
-            (classUnderTest.state.value.error.first() as Message.RemovedFromFavorites).countryCode
+            (classUnderTest.state.value.messages.first() as Message.RemovedFromFavorites).countryCode
         )
     }
     @Test
@@ -223,10 +222,10 @@ internal class CountryListViewModelTest {
 
         // THEN
         assertFalse(classUnderTest.state.value.isLoading)
-        assertIs<Message.RemoveFromFavoritesFailed>(classUnderTest.state.value.error.first())
+        assertIs<Message.RemoveFromFavoritesFailed>(classUnderTest.state.value.messages.first())
         assertEquals(
             countryToRemove,
-            (classUnderTest.state.value.error.first() as Message.RemoveFromFavoritesFailed).countryCode
+            (classUnderTest.state.value.messages.first() as Message.RemoveFromFavoritesFailed).countryCode
         )
     }
 
@@ -239,13 +238,13 @@ internal class CountryListViewModelTest {
         classUnderTest.triggerEvent(CountryListEvents.GetCountries)
 
         // checks that the message was really emited
-        assertEquals(1, classUnderTest.state.value.error.size)
+        assertEquals(1, classUnderTest.state.value.messages.size)
 
 
         // WHEN
         classUnderTest.triggerEvent(CountryListEvents.DismissTopMessage)
 
         // THEN
-        assert(classUnderTest.state.value.error.isEmpty())
+        assert(classUnderTest.state.value.messages.isEmpty())
     }
 }
