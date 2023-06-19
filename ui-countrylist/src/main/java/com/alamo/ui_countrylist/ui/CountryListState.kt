@@ -1,11 +1,16 @@
 package com.alamo.ui_countrylist.ui
 
 import com.alamo.country_domain.Country
+import com.alamo.ui_countrylist.util.Message
+import java.util.LinkedList
+import java.util.Queue
 
 data class CountryListState(
     var isLoading: Boolean = false,
     var list: List<Country> = listOf<Country>(),
-    val error: Pair<Int, String>? = null,
+
+    // TODO: rename this field to messages
+    val error: Queue<Message> = LinkedList<Message>(),
 
     // var favorite list
     // showing: all/favorite

@@ -4,10 +4,12 @@ import androidx.lifecycle.ViewModel
 import com.alamo.core.domain.DataState
 import com.alamo.country_domain.Country
 import com.alamo.country_interactors.UseCase
+import com.alamo.ui_countrylist.util.Message
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import java.util.LinkedList
 
 class CountryListViewModel(
     private val getCountriesUseCase: UseCase,
@@ -24,7 +26,15 @@ class CountryListViewModel(
     fun triggerEvent(events: CountryListEvents) {
         when (events) {
             is CountryListEvents.GetCountries -> getCountries()
-            is CountryListEvents.CloseErrorDialog -> _state.update { it.copy(error = null) }
+            is CountryListEvents.DismissTopMessage -> _state.update {
+                // TODO: refactor, check if we can avoid to duplicate the list
+                val newMessages: LinkedList<Message> = LinkedList<Message>(_state.value.error.toList())
+                if (newMessages.isNotEmpty()) {
+                    newMessages.remove()
+                }
+                it.copy(error = newMessages)
+            }
+
             is CountryListEvents.AddUserCountryToFavorites -> addCountryToFavorites(events.countryCode)
             is CountryListEvents.RemoveUserCountryFromFavorites -> removeFromFavorites(events.countryCode)
         }
@@ -39,22 +49,28 @@ class CountryListViewModel(
                     is DataState.Loading -> {
                         _state.update { it.copy(isLoading = true) }
                     }
+
                     is DataState.Success<*> -> {
+                        @Suppress("UNCHECKED_CAST")
                         val data = dataState.data as List<Country>?
                         if ((data).isNullOrEmpty()) {
                             _state.update { it.copy(list = listOf()) }
                         } else {
-                            _state.update { it.copy(list =  data) }
+                            _state.update { it.copy(list = data) }
                         }
                         _state.update { it.copy(isLoading = false) }
                     }
+
                     is DataState.Error -> {
-                        _state.update {
-                            it.copy(
-                                error = Pair(dataState.code, dataState.description),
-                                isLoading = false
-                            )
-                        }
+                        // TODO: it should be refactored
+                        val newMessages: LinkedList<Message> = LinkedList<Message>(_state.value.error.toList())
+                        newMessages.add(
+                            when (dataState.code) {
+                                101 -> Message.NoInternetConnection
+                                else -> Message.UnknownError
+                            }
+                        )
+                        _state.update { it.copy(error = newMessages, isLoading = false) }
                     }
                 }
             }
@@ -74,11 +90,18 @@ class CountryListViewModel(
                         var mutableList = _state.value.list.map { it }
                         val pos = mutableList.indexOfFirst { it.codeISO3 == countryCode }
                         mutableList[pos].isFavorite = true
-                        _state.update { it.copy(list = mutableList) }
-                        _state.update { it.copy(isLoading = false) }
+                        var messages: LinkedList<Message> = LinkedList(_state.value.error)
+                        messages.add(Message.AddedToFavorites(countryCode))
+                        _state.update { it.copy(
+                            list = mutableList,
+                            isLoading = false,
+                            error = messages,
+                        ) }
                     }
                     is DataState.Error -> {
-                        _state.update { it.copy(isLoading = false) }
+                        var messages: LinkedList<Message> = LinkedList(_state.value.error)
+                        messages.add(Message.AddToFavoritesFailed(countryCode))
+                        _state.update { it.copy(isLoading = false, error = messages) }
                     }
                 }
             }
@@ -93,16 +116,25 @@ class CountryListViewModel(
                     DataState.Loading -> {
                         _state.update { it.copy(isLoading = true) }
                     }
+
                     is DataState.Success<*> -> {
                         // TODO: it should be refactored
                         var mutableList = _state.value.list.map { it }
                         val pos = mutableList.indexOfFirst { it.codeISO3 == countryCode }
                         mutableList[pos].isFavorite = false
-                        _state.update { it.copy(list = mutableList) }
-                        _state.update { it.copy(isLoading = false) }
+
+                        var messages: LinkedList<Message> = LinkedList(_state.value.error)
+                        messages.add(Message.RemovedFromFavorites(countryCode))
+                        _state.update { it.copy(
+                            list = mutableList,
+                            isLoading = false,
+                            error = messages
+                        ) }
                     }
                     is DataState.Error -> {
-                        _state.update { it.copy(isLoading = false) }
+                        var messages: LinkedList<Message> = LinkedList(_state.value.error)
+                        messages.add(Message.RemoveFromFavoritesFailed(countryCode))
+                        _state.update { it.copy(isLoading = false, error = messages) }
                     }
                 }
             }

@@ -11,10 +11,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import com.alamo.jc_ui_components.GenericDialog
 import com.alamo.jc_ui_components.Loader
+import com.alamo.ui_countrylist.R
 import com.alamo.ui_countrylist.ui.CountryListEvents
 import com.alamo.ui_countrylist.ui.CountryListState
+import com.alamo.ui_countrylist.util.Message
 
 @Composable
 fun CountryList(
@@ -26,21 +29,77 @@ fun CountryList(
         color = MaterialTheme.colorScheme.background
     ) {
         Box(modifier = Modifier) {
-            if (state.error != null) {
-                GenericDialog(
-                    title = "Error " + state.error.first,
-                    description = "Error trying to get the contry list from the network: "
-                            + state.error.second,
-                    onConfirm = {
-                        events(CountryListEvents.CloseErrorDialog)
-                        events(CountryListEvents.GetCountries)
-                    },
-                    onConfirmText = "Retry",
-                    onDismiss = {
-                        events(CountryListEvents.CloseErrorDialog)
-                    },
-                    onDismissText = "Cancel"
-                )
+            if (state.error.isNotEmpty()) {
+                when (state.error.first()) {
+                    // TODO: add here toasts, snackbars and dialogs
+                    is Message.NoInternetConnection -> {
+                        GenericDialog(
+                            title = "Error ",
+                            description = "No internet connection",
+                            onConfirm = {
+                                events(CountryListEvents.DismissTopMessage)
+                                events(CountryListEvents.GetCountries)
+                            },
+                            onConfirmText = "Retry",
+                            onDismiss = {
+                                events(CountryListEvents.DismissTopMessage)
+                            },
+                            onDismissText = "Cancel"
+                        )
+                    }
+
+                    is Message.UnknownError -> {
+                        GenericDialog(
+                            title = "Error",
+                            description = "UNKNOWN ERROR",
+                            onConfirm = {
+                                events(CountryListEvents.DismissTopMessage)
+                                events(CountryListEvents.GetCountries)
+                            },
+                            onConfirmText = "Retry",
+                            onDismiss = {
+                                events(CountryListEvents.DismissTopMessage)
+                            },
+                            onDismissText = "Cancel"
+                        )
+                    }
+
+                    is Message.AddToFavoritesFailed -> {
+                        // TODO: replace with a snackbar
+                        val countryCode = (state.error.first() as Message.AddToFavoritesFailed).countryCode
+                        val countryName = state.list.first { it.codeISO3 == countryCode }.name
+                        val message = stringResource(id = R. string.country_add_failed, countryName)
+                        println(message)
+                        events(CountryListEvents.DismissTopMessage)
+                    }
+
+                    is Message.AddedToFavorites -> {
+                        // TODO: replace with a snackbar
+                        val countryCode = (state.error.first() as Message.AddedToFavorites).countryCode
+                        val countryName = state.list.first { it.codeISO3 == countryCode }.name
+                        val message = stringResource(id = R. string.country_added, countryName)
+                        println(message)
+                        events(CountryListEvents.DismissTopMessage)
+                    }
+
+                    is Message.RemoveFromFavoritesFailed -> {
+                        // TODO: replace with a snackbar
+                        val countryCode = (state.error.first() as Message.RemoveFromFavoritesFailed).countryCode
+                        val countryName = state.list.first { it.codeISO3 == countryCode }.name
+                        val message = stringResource(id = R. string.country_remove_failed, countryName)
+                        println(message)
+                        events(CountryListEvents.DismissTopMessage)
+                    }
+
+                    is Message.RemovedFromFavorites -> {
+                        // TODO: replace with a snackbar
+                        val countryCode = (state.error.first() as Message.RemovedFromFavorites).countryCode
+                        val countryName = state.list.first { it.codeISO3 == countryCode }.name
+                        val message = stringResource(id = R. string.country_removed, countryName)
+                        println(message)
+                        events(CountryListEvents.DismissTopMessage)
+                    }
+                }
             }
 
             if (state.list.isNullOrEmpty()) {

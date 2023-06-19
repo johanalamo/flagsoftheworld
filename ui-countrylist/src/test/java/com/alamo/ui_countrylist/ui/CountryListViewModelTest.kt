@@ -3,6 +3,7 @@ package com.alamo.ui_countrylist.ui
 import com.alamo.core.domain.DataState
 import com.alamo.country_domain.Country
 import com.alamo.country_interactors.UseCase
+import com.alamo.ui_countrylist.util.Message
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
@@ -15,8 +16,10 @@ import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.whenever
+import java.util.LinkedList
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertIs
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -70,7 +73,7 @@ internal class CountryListViewModelTest {
 
         // THEN
         assertEquals(
-            CountryListState(list = countryList, error = null, isLoading = false),
+            CountryListState(list = countryList, error = LinkedList<Message>(), isLoading = false),
             classUnderTest.state.value
         )
     }
@@ -87,7 +90,7 @@ internal class CountryListViewModelTest {
 
         // THEN
         assertEquals(
-            CountryListState(list = emptyList(), error = Pair(101, "testing error"), isLoading = false),
+            CountryListState(list = emptyList(), error = LinkedList<Message>(listOf(Message.NoInternetConnection)), isLoading = false),
             classUnderTest.state.value
         )
     }
@@ -104,7 +107,7 @@ internal class CountryListViewModelTest {
 
         // THEN
         assertEquals(
-            CountryListState(list = emptyList(), error = null, isLoading = false),
+            CountryListState(list = emptyList(), isLoading = false),
             classUnderTest.state.value
         )
     }
@@ -124,7 +127,7 @@ internal class CountryListViewModelTest {
     }
 
     @Test
-    fun `onTriggerEvent(AddCountryToFavorites) SHOULD add the country and update the list`() = runTest {
+    fun `onTriggerEvent(AddCountryToFavorites) SHOULD add the country, update the list and show a message WHEN it is successful`() = runTest {
         val newFavorite = "URY"
 
         // GIVEN
@@ -142,11 +145,16 @@ internal class CountryListViewModelTest {
 
         // THEN
         assertTrue(classUnderTest.state.value.list.first { it.codeISO3 == newFavorite }.isFavorite)
+        assertIs<Message.AddedToFavorites>(classUnderTest.state.value.error.first())
+        assertEquals(
+            newFavorite,
+            (classUnderTest.state.value.error.first() as Message.AddedToFavorites).countryCode
+        )
     }
 
 
     @Test
-    fun `onTriggerEvent(AddCountryToFavorites) SHOULD hide the loader WHEN an error occurs `() = runTest {
+    fun `onTriggerEvent(AddCountryToFavorites) SHOULD hide the loader and show a message WHEN an error occurs `() = runTest {
         val newFavorite = "URY"
 
         // GIVEN
@@ -164,10 +172,15 @@ internal class CountryListViewModelTest {
 
         // THEN
         assertFalse(classUnderTest.state.value.isLoading)
+        assertIs<Message.AddToFavoritesFailed>(classUnderTest.state.value.error.first())
+        assertEquals(
+            newFavorite,
+            (classUnderTest.state.value.error.first() as Message.AddToFavoritesFailed).countryCode
+        )
     }
 
     @Test
-    fun `onTriggerEvent(RemoveCountryFromFavorites) SHOULD remove the country and update the list`() = runTest {
+    fun `onTriggerEvent(RemoveCountryFromFavorites) SHOULD remove the country, update the list and show a message WHEN successful`() = runTest {
         val countryToRemove = "VEN"
 
         // GIVEN
@@ -185,9 +198,14 @@ internal class CountryListViewModelTest {
 
         // THEN
         assertFalse(classUnderTest.state.value.list.first { it.codeISO3 == countryToRemove }.isFavorite)
+        assertIs<Message.RemovedFromFavorites>(classUnderTest.state.value.error.first())
+        assertEquals(
+            countryToRemove,
+            (classUnderTest.state.value.error.first() as Message.RemovedFromFavorites).countryCode
+        )
     }
     @Test
-    fun `onTriggerEvent(RemoveCountryFromFavorites) SHOULD hide loader WHEN an error happens`() = runTest {
+    fun `onTriggerEvent(RemoveCountryFromFavorites) SHOULD hide loader and show a message WHEN an error happens`() = runTest {
         val countryToRemove = "VEN"
 
         // GIVEN
@@ -205,19 +223,29 @@ internal class CountryListViewModelTest {
 
         // THEN
         assertFalse(classUnderTest.state.value.isLoading)
+        assertIs<Message.RemoveFromFavoritesFailed>(classUnderTest.state.value.error.first())
+        assertEquals(
+            countryToRemove,
+            (classUnderTest.state.value.error.first() as Message.RemoveFromFavoritesFailed).countryCode
+        )
     }
 
     @Test
-    fun `onTriggerEvent(CloseErrorDialog) SHOULD put error in null WHEN triggers CloseErrorDialogEvent`() = runTest {
+    fun `onTriggerEvent(DismissTopMessage) SHOULD put error in null WHEN triggers CloseErrorDialogEvent`() = runTest {
         // GIVEN
         whenever(getCountriesUseCaseFake.execute()).thenReturn(flow {
-            emit(DataState.Error(9, "any"))
+            emit(DataState.Error(101, "any"))
         })
+        classUnderTest.triggerEvent(CountryListEvents.GetCountries)
+
+        // checks that the message was really emited
+        assertEquals(1, classUnderTest.state.value.error.size)
+
 
         // WHEN
-        classUnderTest.triggerEvent(CountryListEvents.CloseErrorDialog)
+        classUnderTest.triggerEvent(CountryListEvents.DismissTopMessage)
 
         // THEN
-        assertNull( classUnderTest.state.value.error)
+        assert(classUnderTest.state.value.error.isEmpty())
     }
 }

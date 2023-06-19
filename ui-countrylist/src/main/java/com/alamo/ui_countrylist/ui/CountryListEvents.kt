@@ -2,7 +2,7 @@ package com.alamo.ui_countrylist.ui
 
 sealed class CountryListEvents {
     object GetCountries: CountryListEvents()
-    object CloseErrorDialog: CountryListEvents()
+    object DismissTopMessage: CountryListEvents()
 
     data class AddUserCountryToFavorites(val countryCode: String): CountryListEvents()
 

@@ -27,6 +27,9 @@ class GetCountriesUseCase(
                     data = list
                 ))
             } catch (e: Exception) {
+                // TODO: check here the Exception type when network is not conected
+                // TODO: check the exception when data is malformed
+                // TODO: think in other possible errors
                 e.printStackTrace(System.err)
                 emit(DataState.Error(code = 101, description = "No connection"))
             }

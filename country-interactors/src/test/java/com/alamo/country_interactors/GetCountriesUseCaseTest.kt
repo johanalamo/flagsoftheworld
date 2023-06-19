@@ -85,6 +85,7 @@ class GetCountriesUseCaseTest {
         assertIs<DataState.Loading>(emissions[0])
         assertIs<DataState.Success<List<CountryDto>>>(emissions[1])
 
+        @Suppress("UNCHECKED_CAST")
         val favoritesFromCache = (emissions[1] as DataState.Success<List<Country>>).data!!.filter {
             it.isFavorite
         }.map {

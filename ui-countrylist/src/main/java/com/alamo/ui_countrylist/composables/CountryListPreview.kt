@@ -5,6 +5,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.alamo.country_domain.Country
 import com.alamo.ui_countrylist.ui.CountryListEvents
 import com.alamo.ui_countrylist.ui.CountryListState
+import com.alamo.ui_countrylist.util.Message
+import java.util.LinkedList
 
 @Composable
 @Preview
@@ -14,11 +16,10 @@ fun CountryListThreeElementsPreview() {
         state = CountryListState(
             isLoading = false,
             list = listOf<Country>(
-                Country(name = "Venezuela", codeISO3 = "VEN", capital = listOf("Caracas")),
+                Country(name = "Venezuela", codeISO3 = "VEN", capital = listOf("Caracas"), isFavorite = true),
                 Country(name = "Argentina", codeISO3 = "ARG", capital = listOf("Buenos Aires")),
                 Country(name = "Uruguay", codeISO3 = "URY", capital = listOf("Montevideo")),
             ),
-            error = null,
         ),
         events = myLambda,
     )
@@ -36,7 +37,7 @@ fun CountryListErrorPreview() {
                 Country(name = "Argentina", codeISO3 = "ARG", capital = listOf("Buenos Aires")),
                 Country(name = "Uruguay", codeISO3 = "URY", capital = listOf("Montevideo")),
             ),
-            error = Pair(103, "Testing an error"),
+            error = LinkedList<Message>(listOf(Message.NoInternetConnection)),
         ),
         events = myLambda,
     )
@@ -54,7 +55,6 @@ fun CountryListLoadingPreview() {
                 Country(name = "Argentina", codeISO3 = "ARG", capital = listOf("Buenos Aires")),
                 Country(name = "Uruguay", codeISO3 = "URY", capital = listOf("Montevideo")),
             ),
-            error = null,
         ),
         events = myLambda,
     )
