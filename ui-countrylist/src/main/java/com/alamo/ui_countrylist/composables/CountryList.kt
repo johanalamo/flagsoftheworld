@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +23,7 @@ import com.alamo.ui_countrylist.util.Message
 @Composable
 fun CountryList(
     state: CountryListState,
+    snackbarHostState: SnackbarHostState,
     events: (CountryListEvents) -> Unit,
 ) {
     Surface(
@@ -29,6 +31,45 @@ fun CountryList(
         color = MaterialTheme.colorScheme.background
     ) {
         Box(modifier = Modifier) {
+            if (state.list.isNullOrEmpty()) {
+                Text(text = "There is no element in the list")
+            } else {
+                LazyColumn() {
+                    state.list.let {
+                        itemsIndexed(items = it) { _, country ->
+                            CountryCard(
+                                name = country.name,
+                                region = country.region,
+                                subregion = country.subregion,
+                                flag = country.flag,
+                                codeISO3 = country.codeISO3,
+                                population = country.population,
+                                capital = country.capital,
+                                isFavorite = country.isFavorite,
+                                onClick = {
+                                    println("avilan: click on country: " + country.name)
+                                },
+                                addToFavorites = {
+                                    events(CountryListEvents.AddUserCountryToFavorites(country.codeISO3))
+                                },
+                                removeFromFavorites = {
+                                    events(CountryListEvents.RemoveUserCountryFromFavorites(country.codeISO3))
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+
+            if (state.isLoading) {
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                ) {
+                    Loader("Loading from the network")
+                }
+            }
+
             if (state.messages.isNotEmpty()) {
                 when (state.messages.first()) {
                     // TODO: add here toasts, snackbars and dialogs
@@ -68,76 +109,33 @@ fun CountryList(
                         // TODO: replace with a snackbar
                         val countryCode = (state.messages.first() as Message.AddToFavoritesFailed).countryCode
                         val countryName = state.list.first { it.codeISO3 == countryCode }.name
-                        val message = stringResource(id = R. string.country_add_failed, countryName)
-                        println(message)
-                        events(CountryListEvents.DismissTopMessage)
+                        val message = stringResource(id = R.string.country_add_failed, countryName)
+                        ShowSnackbar(message) { events(CountryListEvents.DismissTopMessage) }
                     }
 
                     is Message.AddedToFavorites -> {
                         // TODO: replace with a snackbar
                         val countryCode = (state.messages.first() as Message.AddedToFavorites).countryCode
                         val countryName = state.list.first { it.codeISO3 == countryCode }.name
-                        val message = stringResource(id = R. string.country_added, countryName)
-                        println(message)
-                        events(CountryListEvents.DismissTopMessage)
+                        val message = stringResource(id = R.string.country_added, countryName)
+                        ShowTemporalSnackbar(snackbarHostState, message) { events(CountryListEvents.DismissTopMessage) }
                     }
 
                     is Message.RemoveFromFavoritesFailed -> {
                         // TODO: replace with a snackbar
                         val countryCode = (state.messages.first() as Message.RemoveFromFavoritesFailed).countryCode
                         val countryName = state.list.first { it.codeISO3 == countryCode }.name
-                        val message = stringResource(id = R. string.country_remove_failed, countryName)
-                        println(message)
-                        events(CountryListEvents.DismissTopMessage)
+                        val message = stringResource(id = R.string.country_remove_failed, countryName)
+                        ShowSnackbar(message) { events(CountryListEvents.DismissTopMessage) }
                     }
 
                     is Message.RemovedFromFavorites -> {
                         // TODO: replace with a snackbar
                         val countryCode = (state.messages.first() as Message.RemovedFromFavorites).countryCode
                         val countryName = state.list.first { it.codeISO3 == countryCode }.name
-                        val message = stringResource(id = R. string.country_removed, countryName)
-                        println(message)
-                        events(CountryListEvents.DismissTopMessage)
+                        val message = stringResource(id = R.string.country_removed, countryName)
+                        ShowTemporalSnackbar(snackbarHostState, message) { events(CountryListEvents.DismissTopMessage) }
                     }
-                }
-            }
-
-            if (state.list.isNullOrEmpty()) {
-                Text(text = "There is no element in the list")
-            } else {
-                LazyColumn() {
-                    state.list.let {
-                        itemsIndexed(items = it) { _, country ->
-                            CountryCard(
-                                name = country.name,
-                                region = country.region,
-                                subregion = country.subregion,
-                                flag = country.flag,
-                                codeISO3 = country.codeISO3,
-                                population = country.population,
-                                capital = country.capital,
-                                isFavorite = country.isFavorite,
-                                onClick = {
-                                    println("avilan: click on country: " + country.name)
-                                },
-                                addToFavorites = {
-                                    events(CountryListEvents.AddUserCountryToFavorites(country.codeISO3))
-                                },
-                                removeFromFavorites = {
-                                    events(CountryListEvents.RemoveUserCountryFromFavorites(country.codeISO3))
-                                }
-                            )
-                        }
-                    }
-                }
-            }
-
-            if (state.isLoading) {
-                Column(
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                ) {
-                    Loader("Loading from the network")
                 }
             }
         }

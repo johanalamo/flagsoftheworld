@@ -1,5 +1,6 @@
 package com.alamo.ui_countrylist.composables
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.alamo.country_domain.Country
@@ -22,6 +23,7 @@ fun CountryListThreeElementsPreview() {
             ),
         ),
         events = myLambda,
+        snackbarHostState = SnackbarHostState(),
     )
 }
 
@@ -40,6 +42,7 @@ fun CountryListErrorPreview() {
             messages = LinkedList<Message>(listOf(Message.NoInternetConnection)),
         ),
         events = myLambda,
+        snackbarHostState = SnackbarHostState(),
     )
 }
 
@@ -57,5 +60,6 @@ fun CountryListLoadingPreview() {
             ),
         ),
         events = myLambda,
+        snackbarHostState = SnackbarHostState(),
     )
 }

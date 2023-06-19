@@ -13,7 +13,7 @@ import com.alamo.country_datasource.network.CountryService
 import com.alamo.country_interactors.AddCountryToFavoritesUseCase
 import com.alamo.country_interactors.GetCountriesUseCase
 import com.alamo.country_interactors.RemoveCountryFromFavoritesUseCase
-import com.alamo.ui_countrylist.composables.CountryList
+import com.alamo.ui_countrylist.composables.CountryListScaffold
 import com.alamo.ui_countrylist.ui.*
 
 //decidido.. a usar dos
@@ -111,7 +111,7 @@ class MainActivity : ComponentActivity() {
             viewModel.triggerEvent(CountryListEvents.GetCountries)
             FlagsOfTheWorldTheme {
                 // A surface container using the 'background' color from the theme
-                CountryList(
+                CountryListScaffold(
                     state = viewModel.state.collectAsState().value,
                     events = viewModel::triggerEvent,
                 )
