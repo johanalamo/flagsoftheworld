@@ -17,7 +17,7 @@ class RemoveAllCountriesFromFavoritesUseCase(
                 emit(DataState.Success<Nothing>())
             } catch (e: Exception) {
                 e.printStackTrace()
-                emit(DataState.Error(999, "network error"))
+                emit(DataState.Error(DataState.ErrorType.UNKNOWN))
             }
         }
     }

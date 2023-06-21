@@ -19,6 +19,13 @@ import com.alamo.ui_countrylist.ui.*
 //decidido.. a usar dos
 //info about countries: https://restcountries.com/
 
+// TODO: implement this to check the internet connection
+// val Context.isConnected: Boolean
+//    get() {
+//        return (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
+//            .activeNetworkInfo?.isConnected == true
+//    }
+
 //2. para las banderas (hay dos)
 //esta que encontre
 ////country flags: https://countryflagsapi.com/

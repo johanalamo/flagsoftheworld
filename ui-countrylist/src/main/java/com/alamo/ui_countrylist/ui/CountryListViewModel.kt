@@ -66,7 +66,7 @@ class CountryListViewModel(
                         val newMessages: LinkedList<Message> = LinkedList<Message>(_state.value.messages.toList())
                         newMessages.add(
                             when (dataState.code) {
-                                101 -> Message.NoInternetConnection
+                                DataState.ErrorType.CONNECTION_PROBLEM -> Message.NoInternetConnection
                                 else -> Message.UnknownError
                             }
                         )

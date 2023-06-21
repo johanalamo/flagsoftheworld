@@ -17,7 +17,7 @@ project.ext.jacocoCoverageVerificationTaskList = []
 project.ext.jacocoReportTaskList = []
 
 // Minimum coverage
-project.ext.minimumCoverage = 0.70
+project.ext.minimumCoverage = 0.99
 
 // Defining tasks group
 project.ext.jacocoGroup = "Reporting"

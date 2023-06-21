@@ -9,8 +9,14 @@ sealed class DataState {
     ) : DataState()
 
     data class Error(
-        val code: Int,
-        val description: String,
+        val code: ErrorType,
+        val description: String? = null,
     ) : DataState()
+
+    enum class ErrorType {
+        CONNECTION_PROBLEM,
+        CONNECTION_SLOW,
+        UNKNOWN,
+    }
 }
 

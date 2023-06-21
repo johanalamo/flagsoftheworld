@@ -19,7 +19,7 @@ class AddCountryToFavoritesUseCase(
             if (countryCache.addToFavorites(countryCode = countryCode)) {
                 emit(DataState.Success<Nothing>())
             } else {
-                emit(DataState.Error(999, "network error"))
+                emit(DataState.Error(DataState.ErrorType.UNKNOWN))
             }
         }
     }

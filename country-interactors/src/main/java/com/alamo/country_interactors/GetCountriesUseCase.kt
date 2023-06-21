@@ -5,8 +5,8 @@ import com.alamo.country_datasource.cache.CountryCache
 import com.alamo.country_datasource.network.CountryService
 import com.alamo.country_datasource.network.model.toCountry
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import retrofit2.HttpException
 
 class GetCountriesUseCase(
     private val countryService: CountryService,
@@ -27,12 +27,32 @@ class GetCountriesUseCase(
                     data = list
                 ))
             } catch (e: Exception) {
-                // TODO: check here the Exception type when network is not conected
-                // TODO: check the exception when data is malformed
-                // TODO: think in other possible errors
-                e.printStackTrace(System.err)
-                emit(DataState.Error(code = 101, description = "No connection"))
+                e.printStackTrace()
+                emit(DataState.Error(code = mapToErrorType(e), description = e.localizedMessage))
             }
+        }
+    }
+
+    private fun mapToErrorType(e: Exception): DataState.ErrorType {
+        return when (e) {
+            // when there is a non-null field in the Dto and it does not come from the server
+            is java.lang.NullPointerException,
+
+            // No connection and broken url / no server at all
+            is java.net.UnknownHostException,
+
+            // A network connection detected as insecure
+            is javax.net.ssl.SSLHandshakeException,
+
+            // Retrofit exception, server error response (404, 300, 301, 500, etc)
+            // https://github.com/square/retrofit/blob/master/retrofit/src/main/java/retrofit2/HttpException.java
+            is HttpException -> DataState.ErrorType.CONNECTION_PROBLEM
+
+            // Server takes too long to respond
+            is java.net.SocketTimeoutException ->  DataState.ErrorType.CONNECTION_SLOW
+
+            // other
+            else ->  DataState.ErrorType.UNKNOWN
         }
     }
 }

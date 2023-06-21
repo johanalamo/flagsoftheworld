@@ -4,7 +4,7 @@ jacoco {
     toolVersion = "0.8.8"
 }
 
-project.ext.minimumCoverage = 0.75
+project.ext.minimumCoverage = 1.0
 
 project.ext.excludes = [
         // Nothing to exclude, wildcards can be used (* and ?), examples:
