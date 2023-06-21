@@ -73,7 +73,7 @@ fun CountryList(
             if (state.messages.isNotEmpty()) {
                 when (state.messages.first()) {
                     // TODO: add here toasts, snackbars and dialogs
-                    is Message.NoInternetConnection -> {
+                    is Message.InternetConnectionError -> {
                         GenericDialog(
                             title = "Error ",
                             description = "No internet connection",

@@ -89,7 +89,7 @@ internal class CountryListViewModelTest {
 
         // THEN
         assertEquals(
-            CountryListState(list = emptyList(), messages = LinkedList<Message>(listOf(Message.NoInternetConnection)), isLoading = false),
+            CountryListState(list = emptyList(), messages = LinkedList<Message>(listOf(Message.InternetConnectionError)), isLoading = false),
             classUnderTest.state.value
         )
     }

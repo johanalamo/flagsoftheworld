@@ -1,7 +1,7 @@
 package com.alamo.ui_countrylist.util
 
 sealed class Message {
-    object NoInternetConnection: Message()
+    object InternetConnectionError: Message()
     object UnknownError: Message()
 
     data class AddedToFavorites(val countryCode: String) : Message()
