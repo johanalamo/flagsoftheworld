@@ -67,6 +67,7 @@ class CountryListViewModel(
                         newMessages.add(
                             when (dataState.code) {
                                 DataState.ErrorType.CONNECTION_ERROR -> Message.InternetConnectionError
+                                DataState.ErrorType.CONNECTION_SLOW -> Message.InternetConnectionSlow
                                 else -> Message.UnknownError
                             }
                         )

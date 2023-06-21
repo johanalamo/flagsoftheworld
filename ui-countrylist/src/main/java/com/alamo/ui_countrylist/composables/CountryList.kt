@@ -136,6 +136,8 @@ fun CountryList(
                         val message = stringResource(id = R.string.country_removed, countryName)
                         ShowTemporalSnackbar(snackbarHostState, message) { events(CountryListEvents.DismissTopMessage) }
                     }
+
+                    Message.InternetConnectionSlow -> TODO()
                 }
             }
         }

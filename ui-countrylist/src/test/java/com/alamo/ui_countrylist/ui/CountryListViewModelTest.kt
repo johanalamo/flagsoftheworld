@@ -94,6 +94,41 @@ internal class CountryListViewModelTest {
         )
     }
 
+
+    @Test
+    fun `onTriggerEvent(GetCountries) SHOULD show a connection slow message WHEN collects a connection slow error`() = runTest {
+        // GIVEN
+        whenever(getCountriesUseCaseFake.execute()).thenReturn(flow {
+            emit(DataState.Error(DataState.ErrorType.CONNECTION_SLOW, "testing error"))
+        })
+
+        // WHEN
+        classUnderTest.triggerEvent(CountryListEvents.GetCountries)
+
+        // THEN
+        assertEquals(
+            CountryListState(list = emptyList(), messages = LinkedList<Message>(listOf(Message.InternetConnectionSlow)), isLoading = false),
+            classUnderTest.state.value
+        )
+    }
+
+    @Test
+    fun `onTriggerEvent(GetCountries) SHOULD show an unknown error message WHEN collects an unknown error`() = runTest {
+        // GIVEN
+        whenever(getCountriesUseCaseFake.execute()).thenReturn(flow {
+            emit(DataState.Error(DataState.ErrorType.UNKNOWN, "testing error"))
+        })
+
+        // WHEN
+        classUnderTest.triggerEvent(CountryListEvents.GetCountries)
+
+        // THEN
+        assertEquals(
+            CountryListState(list = emptyList(), messages = LinkedList<Message>(listOf(Message.UnknownError)), isLoading = false),
+            classUnderTest.state.value
+        )
+    }
+
     @Test
     fun `onTriggerEvent(GetCountries) SHOULD show an empty list WHEN collects an empty list`() = runTest {
         // GIVEN
