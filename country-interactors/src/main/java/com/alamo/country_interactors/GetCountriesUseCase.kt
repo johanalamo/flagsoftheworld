@@ -12,7 +12,6 @@ class GetCountriesUseCase(
     private val countryService: CountryService,
     private val countryCache: CountryCache,
 ) : UseCase {
-    // TODO: it must be improved and exceptions should be tested
 
     override fun execute(vararg parameters: String): Flow<DataState> {
         return flow {
@@ -46,7 +45,7 @@ class GetCountriesUseCase(
 
             // Retrofit exception, server error response (404, 300, 301, 500, etc)
             // https://github.com/square/retrofit/blob/master/retrofit/src/main/java/retrofit2/HttpException.java
-            is HttpException -> DataState.ErrorType.CONNECTION_PROBLEM
+            is HttpException -> DataState.ErrorType.CONNECTION_ERROR
 
             // Server takes too long to respond
             is java.net.SocketTimeoutException ->  DataState.ErrorType.CONNECTION_SLOW

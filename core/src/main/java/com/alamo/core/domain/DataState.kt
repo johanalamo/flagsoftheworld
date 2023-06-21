@@ -14,7 +14,7 @@ sealed class DataState {
     ) : DataState()
 
     enum class ErrorType {
-        CONNECTION_PROBLEM,
+        CONNECTION_ERROR,
         CONNECTION_SLOW,
         UNKNOWN,
     }

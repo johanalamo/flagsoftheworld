@@ -78,10 +78,10 @@ internal class CountryListViewModelTest {
     }
 
     @Test
-    fun `onTriggerEvent(GetCountries) SHOULD show an error WHEN collects an error`() = runTest {
+    fun `onTriggerEvent(GetCountries) SHOULD show an connection error WHEN collects an connection error`() = runTest {
         // GIVEN
         whenever(getCountriesUseCaseFake.execute()).thenReturn(flow {
-            emit(DataState.Error(DataState.ErrorType.CONNECTION_PROBLEM, "testing error"))
+            emit(DataState.Error(DataState.ErrorType.CONNECTION_ERROR, "testing error"))
         })
 
         // WHEN
@@ -162,7 +162,7 @@ internal class CountryListViewModelTest {
         })
         whenever(addCountryToFavoritesUseCaseFake.execute(anyString())).thenReturn(flow {
             emit(DataState.Loading)
-            emit(DataState.Error(DataState.ErrorType.CONNECTION_PROBLEM, "any error"))
+            emit(DataState.Error(DataState.ErrorType.CONNECTION_ERROR, "any error"))
         })
         classUnderTest.triggerEvent(CountryListEvents.GetCountries)
 
@@ -213,7 +213,7 @@ internal class CountryListViewModelTest {
         })
         whenever(removeCountryFromFavoritesUseCaseFake.execute(anyString())).thenReturn(flow {
             emit(DataState.Loading)
-            emit(DataState.Error(DataState.ErrorType.CONNECTION_PROBLEM, "any error"))
+            emit(DataState.Error(DataState.ErrorType.CONNECTION_ERROR, "any error"))
         })
         classUnderTest.triggerEvent(CountryListEvents.GetCountries)
 
@@ -233,7 +233,7 @@ internal class CountryListViewModelTest {
     fun `onTriggerEvent(DismissTopMessage) SHOULD put error in null WHEN triggers CloseErrorDialogEvent`() = runTest {
         // GIVEN
         whenever(getCountriesUseCaseFake.execute()).thenReturn(flow {
-            emit(DataState.Error(DataState.ErrorType.CONNECTION_PROBLEM, "any"))
+            emit(DataState.Error(DataState.ErrorType.CONNECTION_ERROR, "any"))
         })
         classUnderTest.triggerEvent(CountryListEvents.GetCountries)
 

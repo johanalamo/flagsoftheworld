@@ -126,7 +126,7 @@ class GetCountriesUseCaseTest {
         // THEN
         assertIs<DataState.Loading>(emissions[0])
         assertIs<DataState.Error>(emissions[1])
-        assertEquals(DataState.ErrorType.CONNECTION_PROBLEM, (emissions[1] as DataState.Error).code)
+        assertEquals(DataState.ErrorType.CONNECTION_ERROR, (emissions[1] as DataState.Error).code)
     }
 
     @Test
@@ -143,7 +143,7 @@ class GetCountriesUseCaseTest {
         // THEN
         assertIs<DataState.Loading>(emissions[0])
         assertIs<DataState.Error>(emissions[1])
-        assertEquals(DataState.ErrorType.CONNECTION_PROBLEM, (emissions[1] as DataState.Error).code)
+        assertEquals(DataState.ErrorType.CONNECTION_ERROR, (emissions[1] as DataState.Error).code)
     }
 
 
@@ -161,7 +161,7 @@ class GetCountriesUseCaseTest {
         // THEN
         assertIs<DataState.Loading>(emissions[0])
         assertIs<DataState.Error>(emissions[1])
-        assertEquals(DataState.ErrorType.CONNECTION_PROBLEM, (emissions[1] as DataState.Error).code)
+        assertEquals(DataState.ErrorType.CONNECTION_ERROR, (emissions[1] as DataState.Error).code)
     }
 
 
@@ -179,7 +179,7 @@ class GetCountriesUseCaseTest {
         // THEN
         assertIs<DataState.Loading>(emissions[0])
         assertIs<DataState.Error>(emissions[1])
-        assertEquals(DataState.ErrorType.CONNECTION_PROBLEM, (emissions[1] as DataState.Error).code)
+        assertEquals(DataState.ErrorType.CONNECTION_ERROR, (emissions[1] as DataState.Error).code)
     }
 
     @Test
