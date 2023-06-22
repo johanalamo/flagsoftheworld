@@ -81,7 +81,7 @@ internal class CountryListViewModelTest {
     fun `onTriggerEvent(GetCountries) SHOULD show an connection error WHEN collects an connection error`() = runTest {
         // GIVEN
         whenever(getCountriesUseCaseFake.execute()).thenReturn(flow {
-            emit(DataState.Error(DataState.ErrorType.CONNECTION_ERROR, "testing error"))
+            emit(DataState.Error(DataState.ErrorType.CONNECTION_ERROR))
         })
 
         // WHEN
@@ -99,7 +99,7 @@ internal class CountryListViewModelTest {
     fun `onTriggerEvent(GetCountries) SHOULD show a connection slow message WHEN collects a connection slow error`() = runTest {
         // GIVEN
         whenever(getCountriesUseCaseFake.execute()).thenReturn(flow {
-            emit(DataState.Error(DataState.ErrorType.CONNECTION_SLOW, "testing error"))
+            emit(DataState.Error(DataState.ErrorType.CONNECTION_SLOW))
         })
 
         // WHEN
@@ -116,7 +116,7 @@ internal class CountryListViewModelTest {
     fun `onTriggerEvent(GetCountries) SHOULD show an unknown error message WHEN collects an unknown error`() = runTest {
         // GIVEN
         whenever(getCountriesUseCaseFake.execute()).thenReturn(flow {
-            emit(DataState.Error(DataState.ErrorType.UNKNOWN, "testing error"))
+            emit(DataState.Error(DataState.ErrorType.UNKNOWN))
         })
 
         // WHEN
@@ -197,7 +197,7 @@ internal class CountryListViewModelTest {
         })
         whenever(addCountryToFavoritesUseCaseFake.execute(anyString())).thenReturn(flow {
             emit(DataState.Loading)
-            emit(DataState.Error(DataState.ErrorType.CONNECTION_ERROR, "any error"))
+            emit(DataState.Error(DataState.ErrorType.CONNECTION_ERROR))
         })
         classUnderTest.triggerEvent(CountryListEvents.GetCountries)
 
@@ -248,7 +248,7 @@ internal class CountryListViewModelTest {
         })
         whenever(removeCountryFromFavoritesUseCaseFake.execute(anyString())).thenReturn(flow {
             emit(DataState.Loading)
-            emit(DataState.Error(DataState.ErrorType.CONNECTION_ERROR, "any error"))
+            emit(DataState.Error(DataState.ErrorType.CONNECTION_ERROR))
         })
         classUnderTest.triggerEvent(CountryListEvents.GetCountries)
 
@@ -268,7 +268,7 @@ internal class CountryListViewModelTest {
     fun `onTriggerEvent(DismissTopMessage) SHOULD put error in null WHEN triggers CloseErrorDialogEvent`() = runTest {
         // GIVEN
         whenever(getCountriesUseCaseFake.execute()).thenReturn(flow {
-            emit(DataState.Error(DataState.ErrorType.CONNECTION_ERROR, "any"))
+            emit(DataState.Error(DataState.ErrorType.CONNECTION_ERROR))
         })
         classUnderTest.triggerEvent(CountryListEvents.GetCountries)
 

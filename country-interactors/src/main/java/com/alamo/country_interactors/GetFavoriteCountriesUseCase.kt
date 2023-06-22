@@ -15,7 +15,7 @@ class GetFavoriteCountriesUseCase(
                 var favoriteList = countryCache.getFavoriteCountries()
                 emit(DataState.Success(favoriteList))
             } catch (e: Exception) {
-                emit(DataState.Error(DataState.ErrorType.UNKNOWN, e.localizedMessage))
+                emit(DataState.Error(DataState.ErrorType.UNKNOWN))
             }
         }
     }

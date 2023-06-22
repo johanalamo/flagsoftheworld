@@ -10,7 +10,6 @@ sealed class DataState {
 
     data class Error(
         val code: ErrorType,
-        val description: String? = null,
     ) : DataState()
 
     enum class ErrorType {

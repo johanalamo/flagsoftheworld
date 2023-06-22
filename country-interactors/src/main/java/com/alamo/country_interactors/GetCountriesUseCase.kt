@@ -27,7 +27,7 @@ class GetCountriesUseCase(
                 ))
             } catch (e: Exception) {
                 e.printStackTrace()
-                emit(DataState.Error(code = mapToErrorType(e), description = e.localizedMessage))
+                emit(DataState.Error(code = mapToErrorType(e)))
             }
         }
     }
