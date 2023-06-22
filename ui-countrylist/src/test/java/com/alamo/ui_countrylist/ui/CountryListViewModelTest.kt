@@ -61,7 +61,7 @@ internal class CountryListViewModelTest {
     }
 
     @Test
-    fun `onTriggerEvent(GetCountries) SHOULD show a list WHEN collects a success`() = runTest {
+    fun `onTriggerEvent(GetCountries) SHOULD show a not empty list WHEN collects a success`() = runTest {
         // GIVEN
         whenever(getCountriesUseCaseFake.execute()).thenReturn(flow {
             emit(DataState.Success<List<Country>>(data = countryList))
@@ -73,6 +73,40 @@ internal class CountryListViewModelTest {
         // THEN
         assertEquals(
             CountryListState(list = countryList, messages = LinkedList<Message>(), isLoading = false),
+            classUnderTest.state.value
+        )
+    }
+
+    @Test
+    fun `onTriggerEvent(GetCountries) SHOULD show a empty list WHEN collects a success`() = runTest {
+        // GIVEN
+        whenever(getCountriesUseCaseFake.execute()).thenReturn(flow {
+            emit(DataState.Success<List<Country>>(data = emptyList()))
+        })
+
+        // WHEN
+        classUnderTest.triggerEvent(CountryListEvents.GetCountries)
+
+        // THEN
+        assertEquals(
+            CountryListState(list = emptyList(), messages = LinkedList<Message>(), isLoading = false),
+            classUnderTest.state.value
+        )
+    }
+
+    @Test
+    fun `onTriggerEvent(GetCountries) SHOULD show a empty list WHEN collects a null list`() = runTest {
+        // GIVEN
+        whenever(getCountriesUseCaseFake.execute()).thenReturn(flow {
+            emit(DataState.Success<List<Country>>(data = null))
+        })
+
+        // WHEN
+        classUnderTest.triggerEvent(CountryListEvents.GetCountries)
+
+        // THEN
+        assertEquals(
+            CountryListState(list = emptyList(), messages = LinkedList<Message>(), isLoading = false),
             classUnderTest.state.value
         )
     }
@@ -265,7 +299,7 @@ internal class CountryListViewModelTest {
     }
 
     @Test
-    fun `onTriggerEvent(DismissTopMessage) SHOULD put error in null WHEN triggers CloseErrorDialogEvent`() = runTest {
+    fun `onTriggerEvent(DismissTopMessage) SHOULD  remove last top message WHEN triggers DismissTopMessage`() = runTest {
         // GIVEN
         whenever(getCountriesUseCaseFake.execute()).thenReturn(flow {
             emit(DataState.Error(DataState.ErrorType.CONNECTION_ERROR))
@@ -274,7 +308,24 @@ internal class CountryListViewModelTest {
 
         // checks that the message was really emited
         assertEquals(1, classUnderTest.state.value.messages.size)
+        
+        // WHEN
+        classUnderTest.triggerEvent(CountryListEvents.DismissTopMessage)
 
+        // THEN
+        assert(classUnderTest.state.value.messages.isEmpty())
+    }
+
+    @Test
+    fun `onTriggerEvent(DismissTopMessage) SHOULD not remove last top message WHEN triggers DismissTopMessage and it is empty`() = runTest {
+        // GIVEN
+        whenever(getCountriesUseCaseFake.execute()).thenReturn(flow {
+            emit(DataState.Success<List<Country>>(data = countryList))
+        })
+        classUnderTest.triggerEvent(CountryListEvents.GetCountries)
+
+        // checks that it has no messages
+        assertEquals(0, classUnderTest.state.value.messages.size)
 
         // WHEN
         classUnderTest.triggerEvent(CountryListEvents.DismissTopMessage)
