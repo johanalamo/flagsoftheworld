@@ -62,7 +62,6 @@ class CountryListViewModel(
                     }
 
                     is DataState.Error -> {
-                        // TODO: it should be refactored
                         val newMessages: LinkedList<Message> = LinkedList<Message>(_state.value.messages.toList())
                         newMessages.add(
                             when (dataState.code) {
@@ -87,17 +86,15 @@ class CountryListViewModel(
                         _state.update { it.copy(isLoading = true) }
                     }
                     is DataState.Success<*> -> {
-                        // TODO: it should be refactored
-                        var mutableList = _state.value.list.map { it }
-                        val pos = mutableList.indexOfFirst { it.codeISO3 == countryCode }
-                        mutableList[pos].isFavorite = true
-                        var messages: LinkedList<Message> = LinkedList(_state.value.messages)
-                        messages.add(Message.AddedToFavorites(countryCode))
-                        _state.update { it.copy(
-                            list = mutableList,
-                            isLoading = false,
-                            messages = messages,
-                        ) }
+                        _state.update {
+                            it.copy(
+                                list = _state.value.list.map { country ->
+                                    if (country.codeISO3 == countryCode) country.isFavorite = true
+                                    country
+                                },
+                                isLoading = false,
+                                messages = LinkedList(_state.value.messages + Message.AddedToFavorites(countryCode)),
+                            ) }
                     }
                     is DataState.Error -> {
                         var messages: LinkedList<Message> = LinkedList(_state.value.messages)
@@ -119,17 +116,13 @@ class CountryListViewModel(
                     }
 
                     is DataState.Success<*> -> {
-                        // TODO: it should be refactored
-                        var mutableList = _state.value.list.map { it }
-                        val pos = mutableList.indexOfFirst { it.codeISO3 == countryCode }
-                        mutableList[pos].isFavorite = false
-
-                        var messages: LinkedList<Message> = LinkedList(_state.value.messages)
-                        messages.add(Message.RemovedFromFavorites(countryCode))
                         _state.update { it.copy(
-                            list = mutableList,
+                            list = _state.value.list.map { country ->
+                                if (country.codeISO3 == countryCode) country.isFavorite = false
+                                country
+                            },
                             isLoading = false,
-                            messages = messages
+                            messages = LinkedList(_state.value.messages + Message.RemovedFromFavorites(countryCode))
                         ) }
                     }
                     is DataState.Error -> {

@@ -25,7 +25,17 @@ import com.alamo.ui_countrylist.ui.*
 //        return (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
 //            .activeNetworkInfo?.isConnected == true
 //    }
+//  MUCH BETTER WOULD BE TO APPLY THIS:
+//      https://developer.android.com/training/monitoring-device-state/connectivity-status-type
+//TODO:
+//agregar un todo que es un test para cuando tenga que manejar cosas de tiempo
+//por ejemplo, cuando guarde la lista de paises en cache, la debo actuaizar en
+//memoria solo si pasaron tres horas, de lo contrario utilizo el cache,
+//y eso es un test para probar cosas del tiempo que aprendi en el curso de
+//udemy de paypal
 
+
+// TODO: try with mutation tests, and review the coverage percentage
 //2. para las banderas (hay dos)
 //esta que encontre
 ////country flags: https://countryflagsapi.com/
@@ -47,12 +57,6 @@ import com.alamo.ui_countrylist.ui.*
 
 /* TODO:
 
-improve CountryList view
- - add favorite icon
-
-
-add data base cache -room database
-add add/remove favorite feature / shared preferences
 add filter dialog (favorites)
 add searching dialog
 
@@ -79,6 +83,7 @@ gradle
 readme.md
 testing
 testing jetpack compose
+koin dependency injection
 
  */
 

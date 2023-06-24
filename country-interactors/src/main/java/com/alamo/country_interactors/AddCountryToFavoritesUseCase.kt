@@ -11,7 +11,6 @@ import java.lang.Exception
 class AddCountryToFavoritesUseCase(
     private val countryCache: CountryCache
 ) : UseCase {
-    // TODO: it must be improved and exceptions should be tested
     override fun execute(vararg parameters: String): Flow<DataState> {
         return flow {
             emit(DataState.Loading)

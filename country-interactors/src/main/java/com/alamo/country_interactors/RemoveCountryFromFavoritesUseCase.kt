@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.flow
 class RemoveCountryFromFavoritesUseCase(
     val countryCache: CountryCache
 ) : UseCase {
-    // TODO: it must be improved and exceptions should be tested
     override fun execute(vararg parameters: String): Flow<DataState> {
         return flow {
             val countryCode = parameters[0]
