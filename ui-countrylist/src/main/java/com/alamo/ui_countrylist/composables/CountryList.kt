@@ -72,72 +72,55 @@ fun CountryList(
 
             if (state.messages.isNotEmpty()) {
                 when (state.messages.first()) {
-                    // TODO: add here toasts, snackbars and dialogs
                     is Message.InternetConnectionError -> {
                         GenericDialog(
-                            title = "Error ",
-                            description = "No internet connection",
+                            title = stringResource(id = R.string.error),
+                            description = stringResource(id = R.string.no_internet_connection),
                             onConfirm = {
                                 events(CountryListEvents.DismissTopMessage)
                                 events(CountryListEvents.GetCountries)
                             },
-                            onConfirmText = "Retry",
+                            onConfirmText = stringResource(id = R.string.retry),
                             onDismiss = {
                                 events(CountryListEvents.DismissTopMessage)
                             },
-                            onDismissText = "Cancel"
+                            onDismissText = stringResource(id = R.string.cancel)
                         )
                     }
-
                     is Message.UnknownError -> {
-                        GenericDialog(
-                            title = "Error",
-                            description = "UNKNOWN ERROR",
-                            onConfirm = {
-                                events(CountryListEvents.DismissTopMessage)
-                                events(CountryListEvents.GetCountries)
-                            },
-                            onConfirmText = "Retry",
-                            onDismiss = {
-                                events(CountryListEvents.DismissTopMessage)
-                            },
-                            onDismissText = "Cancel"
-                        )
+                        ShowSnackbar(stringResource(id = R.string.unknown_error)) {
+                            events(CountryListEvents.DismissTopMessage)
+                        }
                     }
-
                     is Message.AddToFavoritesFailed -> {
-                        // TODO: replace with a snackbar
                         val countryCode = (state.messages.first() as Message.AddToFavoritesFailed).countryCode
                         val countryName = state.list.first { it.codeISO3 == countryCode }.name
                         val message = stringResource(id = R.string.country_add_failed, countryName)
                         ShowSnackbar(message) { events(CountryListEvents.DismissTopMessage) }
                     }
-
                     is Message.AddedToFavorites -> {
-                        // TODO: replace with a snackbar
                         val countryCode = (state.messages.first() as Message.AddedToFavorites).countryCode
                         val countryName = state.list.first { it.codeISO3 == countryCode }.name
                         val message = stringResource(id = R.string.country_added, countryName)
                         ShowTemporalSnackbar(snackbarHostState, message) { events(CountryListEvents.DismissTopMessage) }
                     }
-
                     is Message.RemoveFromFavoritesFailed -> {
-                        // TODO: replace with a snackbar
                         val countryCode = (state.messages.first() as Message.RemoveFromFavoritesFailed).countryCode
                         val countryName = state.list.first { it.codeISO3 == countryCode }.name
                         val message = stringResource(id = R.string.country_remove_failed, countryName)
                         ShowSnackbar(message) { events(CountryListEvents.DismissTopMessage) }
                     }
-
                     is Message.RemovedFromFavorites -> {
-                        // TODO: replace with a snackbar
                         val countryCode = (state.messages.first() as Message.RemovedFromFavorites).countryCode
                         val countryName = state.list.first { it.codeISO3 == countryCode }.name
                         val message = stringResource(id = R.string.country_removed, countryName)
                         ShowTemporalSnackbar(snackbarHostState, message) { events(CountryListEvents.DismissTopMessage) }
                     }
-
-                    Message.InternetConnectionSlow -> TODO()
+                    Message.InternetConnectionSlow -> {
+                        ShowSnackbar(stringResource(id = R.string.internet_connection_slow)) {
+                            events(CountryListEvents.DismissTopMessage)
+                        }
+                    }
                 }
             }
         }

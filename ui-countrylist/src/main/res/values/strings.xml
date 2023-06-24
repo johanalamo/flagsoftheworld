@@ -3,6 +3,12 @@
     <string name="country_removed">%s has been removed from favorites successfully</string>
     <string name="country_add_failed">It was not possible to add %s to favorites</string>
     <string name="country_remove_failed">It was not possible to remove %s from favorites</string>
+    <string name="internet_connection_slow">It seems that Internet connection is very slow right now, please try later!</string>
+    <string name="unknown_error">Something went wrong, please try later!</string>
+    <string name="error">Error</string>
+    <string name="retry">Retry</string>
+    <string name="cancel">Cancel</string>
+    <string name="no_internet_connection">There is not internet connection, or there is a problem to reach the server.</string>
     <string name="country_list">List of countries</string>
     <string name="close">Close</string>
 </resources>

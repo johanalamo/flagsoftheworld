@@ -9,6 +9,11 @@ import com.alamo.ui_countrylist.ui.CountryListState
 import com.alamo.ui_countrylist.util.Message
 import java.util.LinkedList
 
+val listOfCountries = listOf<Country>(
+    Country(name = "Venezuela", codeISO3 = "VEN", capital = listOf("Caracas"), isFavorite = true),
+    Country(name = "Argentina", codeISO3 = "ARG", capital = listOf("Buenos Aires")),
+    Country(name = "Uruguay", codeISO3 = "URY", capital = listOf("Montevideo")),
+)
 @Composable
 @Preview
 fun CountryListThreeElementsPreview() {
@@ -16,30 +21,7 @@ fun CountryListThreeElementsPreview() {
     CountryList(
         state = CountryListState(
             isLoading = false,
-            list = listOf<Country>(
-                Country(name = "Venezuela", codeISO3 = "VEN", capital = listOf("Caracas"), isFavorite = true),
-                Country(name = "Argentina", codeISO3 = "ARG", capital = listOf("Buenos Aires")),
-                Country(name = "Uruguay", codeISO3 = "URY", capital = listOf("Montevideo")),
-            ),
-        ),
-        events = myLambda,
-        snackbarHostState = SnackbarHostState(),
-    )
-}
-
-@Composable
-@Preview
-fun CountryListErrorPreview() {
-    val myLambda: (CountryListEvents) -> Unit = { s: CountryListEvents -> println(s) }
-    CountryList(
-        state = CountryListState(
-            isLoading = false,
-            list = listOf<Country>(
-                Country(name = "Venezuela", codeISO3 = "VEN", capital = listOf("Caracas")),
-                Country(name = "Argentina", codeISO3 = "ARG", capital = listOf("Buenos Aires")),
-                Country(name = "Uruguay", codeISO3 = "URY", capital = listOf("Montevideo")),
-            ),
-            messages = LinkedList<Message>(listOf(Message.InternetConnectionError)),
+            list = listOfCountries,
         ),
         events = myLambda,
         snackbarHostState = SnackbarHostState(),
@@ -53,11 +35,113 @@ fun CountryListLoadingPreview() {
     CountryList(
         state = CountryListState(
             isLoading = true,
-            list = listOf<Country>(
-                Country(name = "Venezuela", codeISO3 = "VEN", capital = listOf("Caracas")),
-                Country(name = "Argentina", codeISO3 = "ARG", capital = listOf("Buenos Aires")),
-                Country(name = "Uruguay", codeISO3 = "URY", capital = listOf("Montevideo")),
-            ),
+            list = listOfCountries,
+        ),
+        events = myLambda,
+        snackbarHostState = SnackbarHostState(),
+    )
+}
+
+@Composable
+@Preview
+fun CountryListInternetConnectionErrorPreview() {
+    val myLambda: (CountryListEvents) -> Unit = { s: CountryListEvents -> println(s) }
+    CountryList(
+        state = CountryListState(
+            isLoading = false,
+            list = listOfCountries,
+            messages = LinkedList<Message>(listOf(Message.InternetConnectionError)),
+        ),
+        events = myLambda,
+        snackbarHostState = SnackbarHostState(),
+    )
+}
+
+@Composable
+@Preview
+fun CountryListInternetConnectionSlowPreview() {
+    val myLambda: (CountryListEvents) -> Unit = { s: CountryListEvents -> println(s) }
+    CountryList(
+        state = CountryListState(
+            isLoading = false,
+            list = listOfCountries,
+            messages = LinkedList<Message>(listOf(Message.InternetConnectionSlow)),
+        ),
+        events = myLambda,
+        snackbarHostState = SnackbarHostState(),
+    )
+}
+
+@Composable
+@Preview
+fun CountryListUnknownErrorPreview() {
+    val myLambda: (CountryListEvents) -> Unit = { s: CountryListEvents -> println(s) }
+    CountryList(
+        state = CountryListState(
+            isLoading = false,
+            list = listOfCountries,
+            messages = LinkedList<Message>(listOf(Message.UnknownError)),
+        ),
+        events = myLambda,
+        snackbarHostState = SnackbarHostState(),
+    )
+}
+
+@Composable
+@Preview
+fun CountryListRemoveFromFavoritesFailedPreview() {
+    val myLambda: (CountryListEvents) -> Unit = { s: CountryListEvents -> println(s) }
+    CountryList(
+        state = CountryListState(
+            isLoading = false,
+            list = listOfCountries,
+            messages = LinkedList<Message>(listOf(Message.RemoveFromFavoritesFailed("VEN"))),
+        ),
+        events = myLambda,
+        snackbarHostState = SnackbarHostState(),
+    )
+}
+
+@Composable
+@Preview
+fun CountryListAddToFavoritesFailedPreview() {
+    val myLambda: (CountryListEvents) -> Unit = { s: CountryListEvents -> println(s) }
+    CountryList(
+        state = CountryListState(
+            isLoading = false,
+            list = listOfCountries,
+            messages = LinkedList<Message>(listOf(Message.AddToFavoritesFailed("VEN"))),
+        ),
+        events = myLambda,
+        snackbarHostState = SnackbarHostState(),
+    )
+}
+
+
+@Composable
+@Preview
+fun CountryListAddedToFavoritesPreview() {
+    val myLambda: (CountryListEvents) -> Unit = { s: CountryListEvents -> println(s) }
+    CountryList(
+        state = CountryListState(
+            isLoading = false,
+            list = listOfCountries,
+            messages = LinkedList<Message>(listOf(Message.AddedToFavorites("VEN"))),
+        ),
+        events = myLambda,
+        snackbarHostState = SnackbarHostState(),
+    )
+}
+
+@Composable
+@Preview
+fun CountryRemovedFromFavoritesPreview() {
+    val myLambda: (CountryListEvents) -> Unit = { s: CountryListEvents -> println(s) }
+    CountryList(
+        state = CountryListState(
+            isLoading = false,
+            list = listOfCountries,
+            messages = LinkedList<Message>(listOf(Message.RemovedFromFavorites("VEN"))),
         ),
         events = myLambda,
         snackbarHostState = SnackbarHostState(),

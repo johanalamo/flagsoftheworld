@@ -308,7 +308,7 @@ internal class CountryListViewModelTest {
 
         // checks that the message was really emited
         assertEquals(1, classUnderTest.state.value.messages.size)
-        
+
         // WHEN
         classUnderTest.triggerEvent(CountryListEvents.DismissTopMessage)
 
