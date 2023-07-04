@@ -1,6 +1,7 @@
 package com.alamo.ui_countrylist.composables
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -14,12 +15,17 @@ import com.alamo.jc_ui_components.PersonalizedIcons
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CountryCard(
-    name: String?,
+    name: String,
     region: String?,
     subregion: String?,
     flag: String?,
+    codeISO3: String?,
     population: Long?,
-    onClick: () -> Unit,
+    capital: List<String>?,
+    isFavorite: Boolean,
+    onClick: () -> Unit? = { null},
+    addToFavorites: () -> Unit? = {null},
+    removeFromFavorites: () -> Unit? = {null},
 ) {
     Card(
         modifier = Modifier
@@ -45,12 +51,28 @@ fun CountryCard(
                         .fillMaxWidth(0.1f),
                     text = flag ?: "",
                 )
-                Text(modifier = Modifier.fillMaxWidth(0.7f), text = name ?: "undefinded")
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(0.7f),
+                    text = "$name ($codeISO3)"
+                )
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.End
                 ) {
-                    Icon(PersonalizedIcons.IsNotFavorite, contentDescription = "",)
+                    if (isFavorite) {
+                        // TODO: this button should be replaced by another thing
+                        Button(onClick = { removeFromFavorites() }) {
+                            Icon(
+                                PersonalizedIcons.IsFavorite,
+                                contentDescription = ""
+                            )
+                        }
+                    } else {
+                        Button(onClick = { addToFavorites() }) {
+                            Icon(PersonalizedIcons.IsNotFavorite, contentDescription = "",)
+                        }
+                    }
                 }
             }
             Text(text = region ?: "no_region")
@@ -61,6 +83,15 @@ fun CountryCard(
                     text = "Population:",
                 )
                 Text(text = population.toString())
+            }
+            capital?.let {
+                Row {
+                    Text(
+                        modifier = Modifier.padding(end = 8.dp),
+                        text = "Capital:",
+                    )
+                    Text(text = it.joinToString(", "))
+                }
             }
         }
     }

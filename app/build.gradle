@@ -1,3 +1,15 @@
+// for jacoco
+buildscript {
+    repositories {
+        google()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.0.4'
+        //Jacoco Plugin
+        classpath "org.jacoco:org.jacoco.core:0.8.8"
+    }
+}
+
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
@@ -67,4 +79,6 @@ dependencies {
     implementation (project(":ui-countrylist"))
     implementation (project(":core"))
     implementation project(path: ':country-domain')
+
+    implementation "app.cash.sqldelight:android-driver:2.0.0-alpha05"
 }

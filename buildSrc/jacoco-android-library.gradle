@@ -1,0 +1,214 @@
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = "0.8.8"
+}
+
+// this is for android libraries
+
+// Definition section ******************************************************************************
+
+// List of jacoco verification tasks.
+// Example: jacocoTestDebugCoverageVerification, jacocoTestReleaseCoverageVerification
+project.ext.jacocoCoverageVerificationTaskList = []
+
+// List of jacoco report tasks
+// Example: jacocoTestDebugReport, jacocoTestReleaseReport
+project.ext.jacocoReportTaskList = []
+
+// Minimum coverage
+project.ext.minimumCoverage = 0.70
+
+// Defining tasks group
+project.ext.jacocoGroup = "Reporting"
+
+// classes to exclude from coverage tasks
+project.ext.excludes = [
+        // Wildcards can be used (* and ?), examples:
+        //        '*composables*',
+        //        '*?iew?odel*',
+        //        '*BuildConfig*',
+        '*composables*',
+        '*BuildConfig*',
+]
+
+// Implementation section **************************************************************************
+
+project.afterEvaluate {
+
+    if (project.android.hasProperty("applicationVariants")) {
+        project.android.applicationVariants.all { variant ->
+            createVariantCoverage(variant)
+        }
+    } else if (project.android.hasProperty("libraryVariants")) {
+        project.android.libraryVariants.all { variant ->
+            // create gradle tasks for each variant.
+            // Ex: jacocoTest[Debug/Release]CoverageVerification, jacocoTest[Debug/Release]Report
+            createVariantCoverage(variant)
+        }
+    }
+
+    // Creates the jacocoTestReport from the global list, which executes the jacocoTestReport
+    // for all variants
+    tasks.create(
+            name: "jacocoTestReport",
+            type: JacocoReport,
+            group: project.ext.jacocoGroup,
+            description: "Generate Jacoco coverage reports for all variants.",
+            dependsOn: project.ext.jacocoReportTaskList
+    )
+
+    // Creates the jacocoTestCoverageVerification from the global list which executes the
+    // jacocoTestCoverageVerification for all variants
+    tasks.create(
+            name: "jacocoTestCoverageVerification",
+            type: JacocoCoverageVerification,
+            group: project.ext.jacocoGroup,
+            description: "Verifies Jacoco coverage for all variants.",
+            dependsOn: project.ext.jacocoCoverageVerificationTaskList
+    )
+}
+
+def createVariantCoverage(variant) {
+    def variantName = variant.name
+    def testTaskName = "test${variantName.capitalize()}UnitTest"
+    def jacocoReportTaskName = "jacocoTest${variantName.capitalize()}Report"
+    def jacocoCoverageVerificationTaskName = "jacocoTest${variantName.capitalize()}CoverageVerification"
+
+    // Adds the Report task to the global list
+    project.ext.jacocoReportTaskList << jacocoReportTaskName
+
+    // Creates the task
+    tasks.create(
+            name: jacocoReportTaskName,
+            type: JacocoReport,
+            dependsOn: "$testTaskName"
+    ) {
+        it.group = project.ext.jacocoGroup
+        it.description = "Generate Jacoco coverage reports for the ${variantName.capitalize()} build."
+
+        it.reports {
+            html.enabled = true
+        }
+
+        def javaClasses = project.fileTree(
+                dir: variant.javaCompileProvider.get().destinationDir,
+                excludes: project.excludes
+        )
+
+        def kotlinClasses = project.fileTree(
+                dir: "${buildDir}/tmp/kotlin-classes/${variantName}",
+                excludes: project.excludes
+        )
+
+        it.getClassDirectories().setFrom(files([javaClasses, kotlinClasses]))
+
+        it.getSourceDirectories().setFrom(files([
+                "$project.projectDir/src/main/java",
+                "$project.projectDir/src/${variantName}/java",
+                "$project.projectDir/src/main/kotlin",
+                "$project.projectDir/src/${variantName}/kotlin"
+        ]))
+
+        it.getExecutionData().setFrom(files(
+                "${project.buildDir}/outputs/unit_test_code_coverage/" +
+                        "${variantName}UnitTest/${testTaskName}.exec"
+        ))
+
+        it.doLast {
+            def m = new File("${project.buildDir}/reports/jacoco/${jacocoReportTaskName}/html/index.html")
+                    .text =~ /Total[^%]*>(\d?\d?\d?%)/
+            if (m) {
+                println "Test coverage: ${m[0][1]}"
+            }
+        }
+    }
+
+    // Add the CoverageVerification task to the global list
+    project.ext.jacocoCoverageVerificationTaskList << jacocoCoverageVerificationTaskName
+
+    // Creates the task
+    tasks.create(
+            name: jacocoCoverageVerificationTaskName,
+            type: JacocoCoverageVerification,
+            dependsOn: jacocoReportTaskName
+    ) {
+        it.group = project.ext.jacocoGroup
+        it.description = "Verifies Jacoco coverage for the ${variantName.capitalize()} build."
+        violationRules {
+
+            failOnViolation = true
+
+            rule {
+                // it could be 'SOURCEFILE', 'BUNDLE', 'CLASS', 'PACKAGE', 'METHOD'
+                element = 'CLASS'
+                excludes = project.excludes
+
+                limit {
+                    counter = 'LINE'
+                    value = 'COVEREDRATIO'
+                    minimum = project.ext.minimumCoverage
+                }
+                limit {
+                    counter = 'CLASS'
+                    value = 'COVEREDRATIO'
+                    minimum = project.ext.minimumCoverage
+                }
+                limit {
+                    counter = 'METHOD'
+                    value = 'COVEREDRATIO'
+                    minimum = project.ext.minimumCoverage
+                }
+                limit {
+                    counter = 'COMPLEXITY'
+                    value = 'COVEREDRATIO'
+                    minimum = project.ext.minimumCoverage
+                }
+                limit {
+                    counter = 'BRANCH'
+                    value = 'COVEREDRATIO'
+                    minimum = project.ext.minimumCoverage
+                }
+                limit {
+                    counter = 'INSTRUCTION'
+                    value = 'COVEREDRATIO'
+                    minimum = project.ext.minimumCoverage
+                }
+            }
+        }
+
+        def javaClasses = project.fileTree(
+                dir: variant.javaCompileProvider.get().destinationDir,
+                excludes: project.excludes
+        )
+
+        def kotlinClasses = project.fileTree(
+                dir: "${buildDir}/tmp/kotlin-classes/${variantName}",
+                excludes: project.excludes
+        )
+
+        it.getClassDirectories().setFrom(files([javaClasses, kotlinClasses]))
+
+        it.getSourceDirectories().setFrom(files([
+                "$project.projectDir/src/main/java",
+                "$project.projectDir/src/${variantName}/java",
+                "$project.projectDir/src/main/kotlin",
+                "$project.projectDir/src/${variantName}/kotlin"
+        ]))
+
+        it.getExecutionData().setFrom(
+                files(
+                        "${project.buildDir}/outputs/unit_test_code_coverage/" +
+                                "${variantName}UnitTest/${testTaskName}.exec"
+                )
+        )
+    }
+}
+
+android {
+    buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
+    }
+}

@@ -1,0 +1,63 @@
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = "0.8.8"
+}
+
+project.ext.minimumCoverage = 1.0
+
+project.ext.excludes = [
+        // Nothing to exclude, wildcards can be used (* and ?), examples:
+        //        '*composables*',
+        //        '*?iew?odel*',
+        //        '*BuildConfig*',
+]
+
+project.getTasks().findByName("jacocoTestReport").dependsOn("test")
+
+project.getTasks().findByName("jacocoTestCoverageVerification").dependsOn("jacocoTestReport")
+
+project.getTasks().findByName("jacocoTestCoverageVerification").configure {
+
+    violationRules {
+
+        failOnViolation = true
+
+        rule {
+            // it could be 'SOURCEFILE', 'BUNDLE', 'CLASS', 'PACKAGE', 'METHOD'
+            element = 'CLASS'
+            excludes = project.excludes
+
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = project.ext.minimumCoverage
+            }
+            limit {
+                counter = 'CLASS'
+                value = 'COVEREDRATIO'
+                minimum = project.ext.minimumCoverage
+            }
+            limit {
+                counter = 'METHOD'
+                value = 'COVEREDRATIO'
+                minimum = project.ext.minimumCoverage
+            }
+            limit {
+                counter = 'COMPLEXITY'
+                value = 'COVEREDRATIO'
+                minimum = project.ext.minimumCoverage
+            }
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = project.ext.minimumCoverage
+            }
+            limit {
+                counter = 'INSTRUCTION'
+                value = 'COVEREDRATIO'
+                minimum = project.ext.minimumCoverage
+            }
+        }
+    }
+}
