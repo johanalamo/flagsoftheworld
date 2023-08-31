@@ -20,6 +20,9 @@ for android
   * Add a search input
 * Architectural
   * Add koin for dependency injection
+  * put every UI element to run in Main thread (even viewmodels)
+  * put every non-ui element to run in a default thread with withConext function,
+    * review viewmodels and UseCases
 
 <!-- 
 //decidido.. a usar dos

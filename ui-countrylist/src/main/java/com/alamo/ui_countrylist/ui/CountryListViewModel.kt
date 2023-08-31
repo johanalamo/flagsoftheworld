@@ -41,6 +41,7 @@ class CountryListViewModel(
     }
 
     private fun getCountries() {
+        // TODO: move it to a viewModel variable with MainDispatcher
         CoroutineScope(dispatcher).launch {
             _state.update { it.copy(isLoading = true) }
             var flow = getCountriesUseCase.execute()

@@ -4,8 +4,10 @@ import com.alamo.core.domain.DataState
 import com.alamo.country_datasource.cache.CountryCache
 import com.alamo.country_datasource.network.CountryService
 import com.alamo.country_datasource.network.model.toCountry
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 
 class GetCountriesUseCase(
@@ -13,10 +15,13 @@ class GetCountriesUseCase(
     private val countryCache: CountryCache,
 ) : UseCase {
 
-    override fun execute(vararg parameters: String): Flow<DataState> {
-        return flow {
+    override suspend fun execute(vararg parameters: String): Flow<DataState> = withContext(Dispatchers.IO) {
+        flow {
             try {
                 emit(DataState.Loading)
+                // TODO: these two should run in parallel and the join the results when they finish
+                // async could be used here
+
                 val list = countryService.getAllCountries().map { it.toCountry() }
                 val favorites = countryCache.getFavoriteCountries()
                 list.forEach {
