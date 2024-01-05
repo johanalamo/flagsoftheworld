@@ -19,8 +19,6 @@ fun CountryCardPreview() {
         region = "America",
         subregion = "Suramerica",
         flag = "🇻🇪",
-        population = 28001002,
-        capital = listOf("Caracas", "Los Teques"),
         isFavorite = true,
         onClick = {},
     )

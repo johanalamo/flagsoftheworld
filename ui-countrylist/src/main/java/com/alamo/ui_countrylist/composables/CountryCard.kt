@@ -1,10 +1,12 @@
 package com.alamo.ui_countrylist.composables
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,20 +17,19 @@ import com.alamo.jc_ui_components.PersonalizedIcons
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CountryCard(
+    modifier: Modifier = Modifier,
     name: String,
     region: String?,
     subregion: String?,
     flag: String?,
     codeISO3: String?,
-    population: Long?,
-    capital: List<String>?,
     isFavorite: Boolean,
     onClick: () -> Unit? = { null},
     addToFavorites: () -> Unit? = {null},
     removeFromFavorites: () -> Unit? = {null},
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(8.dp),
         onClick = {
@@ -61,38 +62,13 @@ fun CountryCard(
                     horizontalAlignment = Alignment.End
                 ) {
                     if (isFavorite) {
-                        // TODO: this button should be replaced by another thing
-                        Button(onClick = { removeFromFavorites() }) {
-                            Icon(
-                                PersonalizedIcons.IsFavorite,
-                                contentDescription = ""
-                            )
-                        }
+                            Icon(modifier = Modifier.clickable { removeFromFavorites() }, imageVector = PersonalizedIcons.IsFavorite, contentDescription = "")
                     } else {
-                        Button(onClick = { addToFavorites() }) {
-                            Icon(PersonalizedIcons.IsNotFavorite, contentDescription = "",)
-                        }
+                            Icon(modifier = Modifier.clickable { addToFavorites() }, imageVector = PersonalizedIcons.IsNotFavorite, contentDescription = "",)
                     }
                 }
             }
-            Text(text = region ?: "no_region")
-            Text(text = subregion ?: "no_subregion")
-            Row {
-                Text(
-                    modifier = Modifier.padding(end = 8.dp),
-                    text = "Population:",
-                )
-                Text(text = population.toString())
-            }
-            capital?.let {
-                Row {
-                    Text(
-                        modifier = Modifier.padding(end = 8.dp),
-                        text = "Capital:",
-                    )
-                    Text(text = it.joinToString(", "))
-                }
-            }
+
         }
     }
 }

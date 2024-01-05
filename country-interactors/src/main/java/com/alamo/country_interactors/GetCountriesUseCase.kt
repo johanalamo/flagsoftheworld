@@ -22,7 +22,9 @@ class GetCountriesUseCase(
                 // TODO: these two should run in parallel and the join the results when they finish
                 // async could be used here
 
-                val list = countryService.getAllCountries().map { it.toCountry() }
+                val list = countryService.getAllCountries().map { it.toCountry() }.sortedBy {
+                    it.region
+                }
                 val favorites = countryCache.getFavoriteCountries()
                 list.forEach {
                     it.isFavorite = (favorites.contains(it.codeISO3))
