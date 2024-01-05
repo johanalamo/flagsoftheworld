@@ -17,7 +17,14 @@ for android
 * UI:
   * Design and implement the detail view
   * Add a filter dialog
+    * grid/vertical
   * Add a search input
+  * Add total field
+  * Add sticky header for continents
+  * Add information about scrolling
+    * example: 32/250
+    * show bar scroll
+    * see video 69 del curso de aristidevs en udemy
 * Architectural
   * Add koin for dependency injection
   * put every UI element to run in Main thread (even viewmodels)

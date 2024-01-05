@@ -8,13 +8,14 @@ import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.alamo.country_datasource.cache.CountryCacheImpl
 import com.alamo.country_datasource.cache.CountryDatabase
-import com.alamo.flagsoftheworld.ui.theme.FlagsOfTheWorldTheme
 import com.alamo.country_datasource.network.CountryService
 import com.alamo.country_interactors.AddCountryToFavoritesUseCase
 import com.alamo.country_interactors.GetCountriesUseCase
 import com.alamo.country_interactors.RemoveCountryFromFavoritesUseCase
+import com.alamo.flagsoftheworld.ui.theme.FlagsOfTheWorldTheme
 import com.alamo.ui_countrylist.composables.CountryListScaffold
-import com.alamo.ui_countrylist.ui.*
+import com.alamo.ui_countrylist.ui.CountryListEvents
+import com.alamo.ui_countrylist.ui.CountryListViewModel
 
 class MainActivity : ComponentActivity() {
 

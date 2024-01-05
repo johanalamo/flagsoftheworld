@@ -42,6 +42,9 @@ fun CountryListScaffold(
                     modifier = Modifier.padding(16.dp)
                 )
             }
+        },
+        bottomBar = {
+            BottomBar()
         }
     )
 }
