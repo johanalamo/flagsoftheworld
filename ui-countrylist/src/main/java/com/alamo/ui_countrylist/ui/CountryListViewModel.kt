@@ -19,6 +19,7 @@ class CountryListViewModel(
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<CountryListState> = MutableStateFlow(CountryListState())
+    private var originalList: List<Country> = listOf<Country>()
 
     val state
         get() = _state.asStateFlow()
@@ -37,6 +38,24 @@ class CountryListViewModel(
 
             is CountryListEvents.AddUserCountryToFavorites -> addCountryToFavorites(events.countryCode)
             is CountryListEvents.RemoveUserCountryFromFavorites -> removeFromFavorites(events.countryCode)
+            is CountryListEvents.UpdateCountryToSearch -> {
+                filterCountries (events.countryToSearch)
+                _state.update { it.copy(countryNameToSearch = events.countryToSearch) }
+            }
+        }
+    }
+
+    private fun filterCountries(countryToSearch: String) {
+        _state.update {
+            it.copy(
+                list = originalList.filter {
+                    it.name.contains(countryToSearch, true) || it.codeISO3.contains(countryToSearch, true)
+                }.sortedBy {
+                    it.name
+                }.sortedBy {
+                    it.region
+                }
+            )
         }
     }
 
@@ -55,8 +74,10 @@ class CountryListViewModel(
                         @Suppress("UNCHECKED_CAST")
                         val data = dataState.data as List<Country>?
                         if ((data).isNullOrEmpty()) {
+                            originalList = listOf()
                             _state.update { it.copy(list = listOf()) }
                         } else {
+                            originalList = data
                             _state.update { it.copy(list = data) }
                         }
                         _state.update { it.copy(isLoading = false) }

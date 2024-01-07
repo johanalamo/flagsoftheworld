@@ -9,7 +9,7 @@ data class CountryListState(
     val isLoading: Boolean = false,
     val list: List<Country> = listOf<Country>(),
     val messages: Queue<Message> = LinkedList<Message>(),
-
+    var countryNameToSearch: String = ""
     // var favorite list
     // showing: all/favorite
     // showing: list/grid
