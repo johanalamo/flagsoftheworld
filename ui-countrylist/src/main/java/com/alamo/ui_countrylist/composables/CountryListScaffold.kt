@@ -1,6 +1,7 @@
 package com.alamo.ui_countrylist.composables
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
@@ -36,6 +37,9 @@ fun CountryListScaffold(
             TopAppBar(
                 title = {
                     TextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
                         textStyle = TextStyle.Default,
                         value = state.countryNameToSearch,
                         maxLines = 1,
@@ -43,22 +47,14 @@ fun CountryListScaffold(
                         onValueChange = {
                             events(CountryListEvents.UpdateCountryToSearch(it))
                         },
-                        placeholder = { Text("Introduce a country")}
+                        trailingIcon = {
+                            IconButton(onClick = { events(CountryListEvents.UpdateCountryToSearch("")) }) {
+                                Icon(imageVector = Icons.Default.Clear, contentDescription = null)
+                            }
+                        },
+                        placeholder = { Text("Introduce a country") }
                     )
                 },
-                navigationIcon = {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(imageVector = Icons.Default.Menu, contentDescription = null)
-                    }
-                },
-                actions = {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(imageVector = Icons.Default.Search, contentDescription = null)
-                    }
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(imageVector = Icons.Default.Clear, contentDescription = null)
-                    }
-                }
             )
         },
         content = { paddingValues ->
