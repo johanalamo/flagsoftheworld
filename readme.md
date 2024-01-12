@@ -31,6 +31,28 @@ for android
   * put every non-ui element to run in a default thread with withConext function,
     * review viewmodels and UseCases
 
+Structure - Information Architecture
+
+* Enter
+  * Home
+    * Country list
+      * Data: continent, country name, country code, small flag
+      * Functionality: select/unselect favorite, search/filter by name/code
+      * Navigates to:
+        * Country details
+          * Data: name, oficial name, official code, currencies, capital, phone suffix,
+            region, subregion, languages, latLng, borders, area, flag, map, population, gini, fifa
+            timezone, coatOfArms
+          * Functionality: select/unselect as a favorite
+          * Navigates to:
+              * Flag
+              * CoatOfArms
+              * Map
+              * Border countries
+  * Map (tentative, not designed yet)
+  * Menu (tentative, not designed yet)
+
+
 <!-- 
 //decidido.. a usar dos
 //info about countries: https://restcountries.com/
