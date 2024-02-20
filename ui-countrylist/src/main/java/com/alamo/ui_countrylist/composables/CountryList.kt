@@ -2,6 +2,7 @@ package com.alamo.ui_countrylist.composables
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -43,7 +45,16 @@ fun CountryList(
     ) {
         Box(modifier = Modifier) {
             if (state.list.isNullOrEmpty()) {
-                Text(text = "There is no element in the list")
+                Column (
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center
+                ) {
+
+                    Text(
+                        modifier = Modifier.padding(start = 16.dp),
+                        text = "There is no element in the list",
+                    )
+                }
             } else {
                 LazyColumn() {
                     val regions: Map<String, List<Country>> = state.list.groupBy {
@@ -54,18 +65,13 @@ fun CountryList(
                             Text(
                                 text = region.key + " (" + region.value.size + ")",
                                 fontWeight = FontWeight.Bold,
-                                textAlign = TextAlign.Center,
+                                textAlign = TextAlign.Left,
+                                color = Color.White,
                                 modifier = Modifier
-                                    .padding(start = 16.dp, end = 16.dp, bottom = 4.dp)
+                                    .padding(start = 16.dp, end = 16.dp, bottom = 4.dp, top = 36.dp)
                                     .fillMaxWidth()
                                     .background(
-                                        brush = Brush.horizontalGradient(
-                                            listOf(
-                                                MaterialTheme.colorScheme.primary,
-                                                MaterialTheme.colorScheme.secondary
-                                            ),
-                                        ),
-                                        alpha = 0.7f,
+                                        color = Color.Black,
                                         shape = RoundedCornerShape(6.dp)
                                     )
                                     .padding(8.dp)
@@ -73,7 +79,6 @@ fun CountryList(
                         }
                         itemsIndexed(items = region.value.sortedBy { it.name }) { _, country ->
                             CountryCard(
-                                modifier = Modifier.padding(horizontal = 16.dp),
                                 name = country.name,
                                 region = country.region,
                                 subregion = country.subregion,

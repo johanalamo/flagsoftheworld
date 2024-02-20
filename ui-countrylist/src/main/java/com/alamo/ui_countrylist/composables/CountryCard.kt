@@ -17,7 +17,6 @@ import com.alamo.jc_ui_components.PersonalizedIcons
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CountryCard(
-    modifier: Modifier = Modifier,
     name: String,
     region: String?,
     subregion: String?,
@@ -29,9 +28,9 @@ fun CountryCard(
     removeFromFavorites: () -> Unit? = {null},
 ) {
     Card(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(start  = 16.dp, end  = 16.dp, top = 4.dp, bottom = 4.dp),
         onClick = {
             onClick()
         },
@@ -39,7 +38,7 @@ fun CountryCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth(1f)
-                .padding(8.dp)
+                .padding(vertical = 8.dp, horizontal = 8.dp)
 
         ) {
             Row(

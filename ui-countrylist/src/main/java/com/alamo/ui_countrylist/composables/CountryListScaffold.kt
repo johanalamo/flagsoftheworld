@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,7 +28,6 @@ fun CountryListScaffold(
     state: CountryListState,
     events: (CountryListEvents) -> Unit,
 ) {
-
     val snackbarHostState = SnackbarHostState()
     Scaffold(
         topBar = {
@@ -39,7 +36,7 @@ fun CountryListScaffold(
                     TextField(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp),
+                            .padding(start = 4.dp, end = 16.dp, top = 4.dp, bottom = 4.dp),
                         textStyle = TextStyle.Default,
                         value = state.countryNameToSearch,
                         maxLines = 1,
