@@ -162,6 +162,9 @@ idea:
 002: update jetpack compose version
 
 003: bottomBar does not show any answer when user tap on it
+
+004: select at least 5 favorites continuosly, then type a country for search inmediately
+     a crash was produced
 */
 
 -->
