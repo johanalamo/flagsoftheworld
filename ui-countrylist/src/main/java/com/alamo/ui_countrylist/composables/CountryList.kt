@@ -18,7 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -38,6 +37,7 @@ fun CountryList(
     state: CountryListState,
     snackbarHostState: SnackbarHostState,
     events: (CountryListEvents) -> Unit,
+    onCountrySelected: (String) -> Unit = { null },
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -86,7 +86,7 @@ fun CountryList(
                                 codeISO3 = country.codeISO3,
                                 isFavorite = country.isFavorite,
                                 onClick = {
-                                    println("avilan: click on country: " + country.name)
+                                    onCountrySelected(country.codeISO3)
                                 },
                                 addToFavorites = {
                                     events(CountryListEvents.AddUserCountryToFavorites(country.codeISO3))

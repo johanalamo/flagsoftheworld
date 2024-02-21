@@ -167,4 +167,12 @@ idea:
      a crash was produced
 */
 
+implementing countryDetails module
+look for network,
+get if it is favorite,
+load data
+
+
+
+
 -->

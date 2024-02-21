@@ -27,6 +27,7 @@ import com.alamo.ui_countrylist.ui.CountryListState
 fun CountryListScaffold(
     state: CountryListState,
     events: (CountryListEvents) -> Unit,
+    onCountrySelected: (String) -> Unit = { null },
 ) {
     val snackbarHostState = SnackbarHostState()
     Scaffold(
@@ -56,7 +57,7 @@ fun CountryListScaffold(
         },
         content = { paddingValues ->
             Column(modifier = Modifier.padding(paddingValues)) {
-                CountryList(state = state, events = events, snackbarHostState = snackbarHostState)
+                CountryList(state = state, events = events, snackbarHostState = snackbarHostState, onCountrySelected = onCountrySelected)
             }
         },
         snackbarHost = {
