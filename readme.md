@@ -159,8 +159,6 @@ idea:
   isFfloatingActionButtonDocked - parece una version nueva de jetpack compose
   and check scaffoldState.snackbarHostState.currentSnackbarData because it contains info about the snackbar being shown
 
-002: update jetpack compose version
-
 003: bottomBar does not show any answer when user tap on it
 
 004: cambiar     implementation 'androidx.compose.material3:material3:1.2.0'
