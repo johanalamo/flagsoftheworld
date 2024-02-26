@@ -104,11 +104,11 @@ fun CountryDetailsScaffold(
                         fontWeight = FontWeight.Bold
                     )
                 }
-                LabelValue("Gini") { TextBold("**** in standby ********") }
-                LabelValue("Currencies") { TextBold("**** in standby ********") }
+//                LabelValue("Gini") { TextBold("**** in standby ********    for the future  ****") }
+//                LabelValue("Currencies") { TextBold("**** in standby ********    for the future  ****") }
                 LabelValue("Borders") { state.data?.borders?.forEach { TextBold(it) } }
                 LabelValue("Lat/Lon") { TextBold(state.data?.latlng?.toString().orEmpty()) }
-                LabelValue("Languages") { TextBold("**** in standby ********") }
+//                LabelValue("Languages") { TextBold("**** in standby ********    for the future  ****") }
                 LabelValue("Fifa code") { TextBold(state.data?.fifa.orEmpty()) }
                 LabelValue("Timezones") { state.data?.timezones?.forEach { TextBold(it) } }
                 LabelValue("Flag") {

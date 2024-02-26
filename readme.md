@@ -148,39 +148,44 @@ testing jetpack compose
 koin dependency injection
 
 
-Bugs:
-001: usar el snackbar hostState, en vez de crear uno nuevo:
-hacer click muchas veces en un mismo favorite (add/ remove), y ver que aparecen infinitamente los mensajes
-idea:
-    val scaffoldState = rememberBottomSheetScaffoldState()
-    scaffoldState.snackbarHostState.showSnackbar()
-  floatingActionButtonPosition
-  floatingActionButton
-  isFfloatingActionButtonDocked - parece una version nueva de jetpack compose
-  and check scaffoldState.snackbarHostState.currentSnackbarData because it contains info about the snackbar being shown
+*********  JIRA - DASHBOARD ************************************************************************
+Current one:
 
-003: bottomBar does not show any answer when user tap on it
+010:     missed functionality:
+Message when there is no network
+add/remove to/from favorites
 
-004: cambiar     implementation 'androidx.compose.material3:material3:1.2.0'
-a     implementation 'androidx.compose.material:material:1.2.0'
-en build.gradle ui-countrylist a ver que diferencia se ve
+
+NEXT:
 
 006: cambiar a dagger
-
-007: cambiar los useCase a suspend operator invoke()
-
-008: image loader does not work when a scroll is set in the column
-
 
 009:
 inject: countryDb, driver, country Database ,both viewmodels, imageLoader(see DotaInfo project): MainActivity
 inject: all usecases in the viewmodels.
 
 
+
+
+************************   BACKLOG **************************************
+
+008: image loader does not work when a scroll is set in the column
 010: missing fields: gini, currencies, languages, map, jcoat of arms
-     missed functionality:
-        Message when there is no network
-        add/remove to/from favorites
+003: bottomBar does not show any answer when user tap on it
+
+001: usar el snackbar hostState, en vez de crear uno nuevo:
+hacer click muchas veces en un mismo favorite (add/ remove), y ver que aparecen infinitamente los mensajes
+idea:
+val scaffoldState = rememberBottomSheetScaffoldState()
+scaffoldState.snackbarHostState.showSnackbar()
+floatingActionButtonPosition
+floatingActionButton
+isFfloatingActionButtonDocked - parece una version nueva de jetpack compose
+and check scaffoldState.snackbarHostState.currentSnackbarData because it contains info about the snackbar being shown
+
+007: cambiar los useCase a suspend operator invoke()
+
+
 
 */
 
