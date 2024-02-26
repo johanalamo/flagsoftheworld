@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CountryNameDto(
-    @SerialName("common") val common: String = "",
-    @SerialName("official") val official: String = "",
+data class CoatOfArmsDto(
+    @SerialName("png") val png: String = "",
+    @SerialName("svg") val svg: String = "",
 )

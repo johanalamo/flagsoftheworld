@@ -37,7 +37,7 @@ fun CountryList(
     state: CountryListState,
     snackbarHostState: SnackbarHostState,
     events: (CountryListEvents) -> Unit,
-    onCountrySelected: (String) -> Unit = { null },
+    navigateToCountryDetailsScreen: (String) -> Unit = { null },
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -80,13 +80,11 @@ fun CountryList(
                         itemsIndexed(items = region.value.sortedBy { it.name }) { _, country ->
                             CountryCard(
                                 name = country.name,
-                                region = country.region,
-                                subregion = country.subregion,
                                 flag = country.flag,
                                 codeISO3 = country.codeISO3,
                                 isFavorite = country.isFavorite,
                                 onClick = {
-                                    onCountrySelected(country.codeISO3)
+                                    navigateToCountryDetailsScreen(country.codeISO3)
                                 },
                                 addToFavorites = {
                                     events(CountryListEvents.AddUserCountryToFavorites(country.codeISO3))

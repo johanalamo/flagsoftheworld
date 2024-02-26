@@ -55,6 +55,9 @@ dependencies {
     implementation "androidx.compose.ui:ui:1.6.1"
     implementation "androidx.compose.ui:ui-tooling-preview:1.6.1"
 
+    // For loading images from network
+    implementation "io.coil-kt:coil-compose:1.3.0"
+
     implementation(project(":country-interactors"))
     implementation(project(":country-domain"))
     implementation(project(":jc-ui-components"))

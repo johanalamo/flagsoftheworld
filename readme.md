@@ -163,8 +163,27 @@ idea:
 
 003: bottomBar does not show any answer when user tap on it
 
-004: select at least 5 favorites continuosly, then type a country for search inmediately
-     a crash was produced
+004: cambiar     implementation 'androidx.compose.material3:material3:1.2.0'
+a     implementation 'androidx.compose.material:material:1.2.0'
+en build.gradle ui-countrylist a ver que diferencia se ve
+
+006: cambiar a dagger
+
+007: cambiar los useCase a suspend operator invoke()
+
+008: image loader does not work when a scroll is set in the column
+
+
+009:
+inject: countryDb, driver, country Database ,both viewmodels, imageLoader(see DotaInfo project): MainActivity
+inject: all usecases in the viewmodels.
+
+
+010: missing fields: gini, currencies, languages, map, jcoat of arms
+     missed functionality:
+        Message when there is no network
+        add/remove to/from favorites
+
 */
 
 implementing countryDetails module
