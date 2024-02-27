@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import kotlin.reflect.typeOf
 
 class GetCountryDetailsUseCase(
     private val countryService: CountryService,
@@ -43,6 +44,9 @@ class GetCountryDetailsUseCase(
 
             // No connection and broken url / no server at all
             is java.net.UnknownHostException,
+
+            // An error has occurred trying to connect
+            is java.net.ConnectException,
 
             // A network connection detected as insecure
             is javax.net.ssl.SSLHandshakeException,

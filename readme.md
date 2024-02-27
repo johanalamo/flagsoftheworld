@@ -156,9 +156,21 @@ Message when there is no network
 add/remove to/from favorites
 
 
+010: navigate back (el boton de abajo de android), no actualiza los favorites en la pantalla principal si este fue cambiado,
+ej: entrar a Angola, presionar favorites, presionar atras (boton android), ver que en la principal no se activo.
+
+
+El mensaje de no connection no esta funcionando...
+     entrar al list
+     desconectar a internet
+     entrar a un pais cualquiera
+     muestra el anterior y no da el mensaje de error de internet.
+    revisar bien los mensajes de errores tanto en los viewmodels como en los usecases
+        cuando se entra al details sin conexion, da el mensaje de error, pero si se reconecta y se presiona Retry, no funciona (al parecer no tiene el codigo del pais)
+
 NEXT:
 
-006: cambiar a dagger
+006: cambiar a Koin
 
 009:
 inject: countryDb, driver, country Database ,both viewmodels, imageLoader(see DotaInfo project): MainActivity
@@ -178,22 +190,17 @@ hacer click muchas veces en un mismo favorite (add/ remove), y ver que aparecen 
 idea:
 val scaffoldState = rememberBottomSheetScaffoldState()
 scaffoldState.snackbarHostState.showSnackbar()
-floatingActionButtonPosition
-floatingActionButton
-isFfloatingActionButtonDocked - parece una version nueva de jetpack compose
+
 and check scaffoldState.snackbarHostState.currentSnackbarData because it contains info about the snackbar being shown
 
 007: cambiar los useCase a suspend operator invoke()
 
-
+008: Classe Message esta repetida en uicountrylist y uicountrydetails
+009: funciones ShowSnackbar y ShowTemporalSnackbar estan repetidas en uicountrylist y uicountrydetails
+010: snackbarHosting no esta bien manejado, cuando se activa y desactiva internet, los mensajes de error de conexion
+     parecieran aparecer de forma aleatoria y en las pantallas que no son.
 
 */
-
-implementing countryDetails module
-look for network,
-get if it is favorite,
-load data
-
 
 
 

@@ -94,7 +94,10 @@ class MainActivity : ComponentActivity() {
                         CountryDetailsScaffold(
                             state = viewModelDetails.state.collectAsState().value,
                             events = viewModelDetails::triggerEvent,
-                            navigateBack = { navigationController.popBackStack() }
+                            navigateBack = {
+                                viewModel.triggerEvent(CountryListEvents.GetCountries)
+                                navigationController.popBackStack()
+                            }
                         )
                     }
                 }

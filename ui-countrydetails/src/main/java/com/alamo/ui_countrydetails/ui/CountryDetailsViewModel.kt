@@ -26,9 +26,7 @@ class CountryDetailsViewModel(
 
     fun triggerEvent(events: CountryDetailsEvents) {
         when (events) {
-            is CountryDetailsEvents.GetCountryDetails -> getCountryDetails(
-                events.countryCode
-            )
+            is CountryDetailsEvents.GetCountryDetails -> getCountryDetails(events.countryCode)
             is CountryDetailsEvents.DismissTopMessage -> _state.update {
                 // TODO: refactor, check if we can avoid to duplicate the list
                 val newMessages: LinkedList<Message> = LinkedList<Message>(_state.value.messages.toList())
@@ -47,7 +45,7 @@ class CountryDetailsViewModel(
     private fun getCountryDetails(countryCode: String) {
         // TODO: move it to a viewModel variable with MainDispatcher
         CoroutineScope(dispatcher).launch {
-            _state.update { it.copy(isLoading = true) }
+            _state.update { it.copy(isLoading = true, data = null) }
             var flow = getCountryDetailsUseCase.execute(countryCode)
             flow.collect { dataState ->
                 when (dataState) {
@@ -69,15 +67,15 @@ class CountryDetailsViewModel(
 
                     is DataState.Error -> {
                         // TODO: Implement message functionality
-//                        val newMessages: LinkedList<Message> = LinkedList<Message>(_state.value.messages.toList())
-//                        newMessages.add(
-//                            when (dataState.code) {
-//                                DataState.ErrorType.CONNECTION_ERROR -> Message.InternetConnectionError
-//                                DataState.ErrorType.CONNECTION_SLOW -> Message.InternetConnectionSlow
-//                                else -> Message.UnknownError
-//                            }
-//                        )
-//                        _state.update { it.copy(messages = newMessages, isLoading = false) }
+                        val newMessages: LinkedList<Message> = LinkedList<Message>(_state.value.messages.toList())
+                        newMessages.add(
+                            when (dataState.code) {
+                                DataState.ErrorType.CONNECTION_ERROR -> Message.InternetConnectionError
+                                DataState.ErrorType.CONNECTION_SLOW -> Message.InternetConnectionSlow
+                                else -> Message.UnknownError
+                            }
+                        )
+                        _state.update { it.copy(messages = newMessages, isLoading = false) }
                     }
                 }
             }
@@ -85,66 +83,54 @@ class CountryDetailsViewModel(
     }
 
     private fun addCountryToFavorites(countryCode: String) {
-        println(countryCode)
-        // TODO: Implement addCountryToFavorites functionality
-
-//        CoroutineScope(dispatcher).launch {
-//            var flow = addCountryToFavoritesUseCase.execute(countryCode)
-//            flow.collect { dataState ->
-//                when (dataState) {
-//                    DataState.Loading -> {
-//                        _state.update { it.copy(isLoading = true) }
-//                    }
-//                    is DataState.Success<*> -> {
-//                        _state.update {
-//                            it.copy(
-//                                list = _state.value.list.map { country ->
-//                                    if (country.codeISO3 == countryCode) country.isFavorite = true
-//                                    country
-//                                },
-//                                isLoading = false,
-//                                messages = LinkedList(_state.value.messages + Message.AddedToFavorites(countryCode)),
-//                            ) }
-//                    }
-//                    is DataState.Error -> {
-//                        var messages: LinkedList<Message> = LinkedList(_state.value.messages)
-//                        messages.add(Message.AddToFavoritesFailed(countryCode))
-//                        _state.update { it.copy(isLoading = false, messages = messages) }
-//                    }
-//                }
-//            }
-//        }
+        CoroutineScope(dispatcher).launch {
+            var flow = addCountryToFavoritesUseCase.execute(countryCode)
+            flow.collect { dataState ->
+                when (dataState) {
+                    DataState.Loading -> {
+                        _state.update { it.copy(isLoading = true) }
+                    }
+                    is DataState.Success<*> -> {
+                        _state.update {
+                            it.copy(
+                                data = _state.value.data?.copy(isFavorite = true),
+                                isLoading = false,
+                                messages = LinkedList(_state.value.messages + Message.AddedToFavorites(countryCode)),
+                            ) }
+                    }
+                    is DataState.Error -> {
+                        var messages: LinkedList<Message> = LinkedList(_state.value.messages)
+                        messages.add(Message.AddToFavoritesFailed(countryCode))
+                        _state.update { it.copy(isLoading = false, messages = messages) }
+                    }
+                }
+            }
+        }
     }
 
     private fun removeFromFavorites(countryCode: String) {
-        println(countryCode)
-        // TODO: Implement removeFromFavorites functionality
+        CoroutineScope(dispatcher).launch {
+            var flow = removeCountryFromFavoritesUseCase.execute(countryCode)
+            flow.collect { dataState ->
+                when (dataState) {
+                    DataState.Loading -> {
+                        _state.update { it.copy(isLoading = true) }
+                    }
 
-//        CoroutineScope(dispatcher).launch {
-//            var flow = removeCountryFromFavoritesUseCase.execute(countryCode)
-//            flow.collect { dataState ->
-//                when (dataState) {
-//                    DataState.Loading -> {
-//                        _state.update { it.copy(isLoading = true) }
-//                    }
-//
-//                    is DataState.Success<*> -> {
-//                        _state.update { it.copy(
-//                            list = _state.value.list.map { country ->
-//                                if (country.codeISO3 == countryCode) country.isFavorite = false
-//                                country
-//                            },
-//                            isLoading = false,
-//                            messages = LinkedList(_state.value.messages + Message.RemovedFromFavorites(countryCode))
-//                        ) }
-//                    }
-//                    is DataState.Error -> {
-//                        var messages: LinkedList<Message> = LinkedList(_state.value.messages)
-//                        messages.add(Message.RemoveFromFavoritesFailed(countryCode))
-//                        _state.update { it.copy(isLoading = false, messages = messages) }
-//                    }
-//                }
-//            }
-//        }
+                    is DataState.Success<*> -> {
+                        _state.update { it.copy(
+                            data = _state.value.data?.copy(isFavorite = false),
+                            isLoading = false,
+                            messages = LinkedList(_state.value.messages + Message.RemovedFromFavorites(countryCode))
+                        ) }
+                    }
+                    is DataState.Error -> {
+                        var messages: LinkedList<Message> = LinkedList(_state.value.messages)
+                        messages.add(Message.RemoveFromFavoritesFailed(countryCode))
+                        _state.update { it.copy(isLoading = false, messages = messages) }
+                    }
+                }
+            }
+        }
     }
 }

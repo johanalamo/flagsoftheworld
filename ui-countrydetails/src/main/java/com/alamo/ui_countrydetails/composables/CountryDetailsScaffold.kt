@@ -19,23 +19,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.BaselineShift
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
-import com.alamo.jc_ui_components.Loader
 import com.alamo.jc_ui_components.PersonalizedIcons
 import com.alamo.ui_countrydetails.ui.CountryDetailsEvents
 import com.alamo.ui_countrydetails.ui.CountryDetailsState
-import java.text.DecimalFormat
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalCoilApi::class)
 @Composable
@@ -45,10 +33,6 @@ fun CountryDetailsScaffold(
     navigateBack: () -> Unit
 ) {
     val snackbarHostState = SnackbarHostState()
-    val imageLoader = ImageLoader.Builder(LocalContext.current)
-        .availableMemoryPercentage(0.25) // Don't know what is recommended?
-        .crossfade(true)
-        .build()
     Scaffold(topBar = {
         TopAppBar(navigationIcon = {
             IconButton(onClick = { navigateBack() }) {
@@ -60,80 +44,23 @@ fun CountryDetailsScaffold(
         }, title = {
             Text(text = state.data?.name.orEmpty())
         }, actions = {
-            IconButton(onClick = { }) {
-                if (state.data?.isFavorite == true) {
+
+            if (state.data?.isFavorite == true) {
+                IconButton(onClick = { events(CountryDetailsEvents.RemoveCountryFromFavorites(state.data.codeISO3)) }) {
                     Icon(imageVector = PersonalizedIcons.IsFavorite, contentDescription = null)
-                } else {
+                }
+            } else {
+                IconButton(onClick = { events(CountryDetailsEvents.AddCountryToFavorites(state.data?.codeISO3 ?: ""))}) {
                     Icon(imageVector = PersonalizedIcons.IsNotFavorite, contentDescription = null)
                 }
             }
+
         })
     }, content = { paddingValues ->
-        if (state.isLoading) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center
-            ) {
-                Loader("Loading from the network")
-            }
-        } else {
-            Column(modifier = Modifier.padding(paddingValues)) {
-                LabelValue("Region") { TextBold(state.data?.region.orEmpty()) }
-                LabelValue("Subregion") { TextBold(state.data?.subregion.orEmpty()) }
-                LabelValue("Official name") { TextBold(state.data?.officialName.orEmpty()) }
-                LabelValue("Name") { TextBold(state.data?.name.orEmpty()) }
-                LabelValue("ISO3 code") { TextBold(state.data?.codeISO3.orEmpty()) }
-                LabelValue("Capital") { state.data?.capital?.forEach { TextBold(it) } }
-                LabelValue("Population") {
-                    TextBold(DecimalFormat("#,###").format((state.data?.population ?: 0)))
-                }
-                LabelValue("Area") {
-                    val formato = DecimalFormat("#,###")
-                    val superscript = SpanStyle(
-                        baselineShift = BaselineShift.Superscript,
-                        fontSize = 12.sp,
-                    )
-                    Text(
-                        text =
-                        buildAnnotatedString {
-                            append(formato.format(state.data?.area ?: 0) + " Km")
-                            withStyle(superscript) {
-                                append("2")
-                            }
-                        },
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-//                LabelValue("Gini") { TextBold("**** in standby ********    for the future  ****") }
-//                LabelValue("Currencies") { TextBold("**** in standby ********    for the future  ****") }
-                LabelValue("Borders") { state.data?.borders?.forEach { TextBold(it) } }
-                LabelValue("Lat/Lon") { TextBold(state.data?.latlng?.toString().orEmpty()) }
-//                LabelValue("Languages") { TextBold("**** in standby ********    for the future  ****") }
-                LabelValue("Fifa code") { TextBold(state.data?.fifa.orEmpty()) }
-                LabelValue("Timezones") { state.data?.timezones?.forEach { TextBold(it) } }
-                LabelValue("Flag") {
-                    Image(
-                        modifier = Modifier.fillMaxWidth(),
-                        painter = rememberImagePainter(
-                            state.data?.flagUrl.orEmpty(),
-                            imageLoader = imageLoader,
-                        ),
-                        contentDescription = state.data?.flagDescription,
-                        contentScale = ContentScale.FillWidth,
-                    )
-                }
-                LabelValue("Map") { TextBold(state.data?.name.orEmpty()) }
-                LabelValue("Coat of Arms") {
-                    Image(
-                        painter = rememberImagePainter(
-                            state.data?.coatOfArmsUrl.orEmpty(),
-                            imageLoader = imageLoader,
-                        ),
-                        contentDescription = null,
-                        contentScale = ContentScale.FillWidth,
-                    )
-                }
-            }
+
+
+        Column(modifier = Modifier.padding(paddingValues)) {
+            CountryDetails(state = state, events = events, snackbarHostState = snackbarHostState)
         }
     }, snackbarHost = {
         SnackbarHost(snackbarHostState) { snackbarData ->
