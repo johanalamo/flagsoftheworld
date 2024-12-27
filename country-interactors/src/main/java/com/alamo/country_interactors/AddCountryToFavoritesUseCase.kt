@@ -1,9 +1,10 @@
 package com.alamo.country_interactors
+// bad approach packages names should not contain underscores
+
 
 import com.alamo.core.domain.DataState
 import com.alamo.country_datasource.cache.CountryCache
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow

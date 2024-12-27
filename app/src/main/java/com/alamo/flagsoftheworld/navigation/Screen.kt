@@ -22,4 +22,16 @@ sealed class Screen {
         val route = "countryDetails/{${Fields.countryCode}}"
         fun createPath(countryCode: String) = "$root/$countryCode"
     }
+
+    object Map : Screen() {
+        val root = "map"
+        val route = "map"
+        fun createPath() = root
+    }
+
+    object Settings : Screen() {
+        val root = "settings"
+        val route = "settings"
+        fun createPath() = root
+    }
 }

@@ -10,6 +10,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
+import java.net.InetSocketAddress
+import java.net.Proxy
 
 interface CountryService {
 
@@ -34,13 +36,6 @@ interface CountryService {
             val retrofit = Retrofit
                 .Builder()
                 .baseUrl(BASE_URL)
-//                .addConverterFactory(Json
-//                {
-//                    ignoreUnknownKeys = true
-//                    encodeDefaults = true
-//                }
-//                    .asConverterFactory("application/json".toMediaType())
-//                )
                 .client(
                     client
                 )

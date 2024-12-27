@@ -1,4 +1,4 @@
-package com.alamo.ui_countrylist.composables
+package com.alamo.jc_ui_components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,10 +8,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Place
-import androidx.compose.material3.Divider
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -24,17 +24,22 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun BottomBar() {
+fun BottomBar(
+    navigateToCountryListScreen: () -> Unit = { null },
+    navigateToMapScreen: () -> Unit = { null },
+    navigateToSettingsScreen: () -> Unit = { null },
+
+    ) {
     var selected by remember { mutableStateOf(0) }
 
 
     Column {
         Spacer(modifier = Modifier.height(4.dp))
-        Divider(
-            thickness = 1.dp,
+        HorizontalDivider(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            thickness = 1.dp,
             color = MaterialTheme.colorScheme.primary
         )
         Spacer(modifier = Modifier.height(4.dp))
@@ -47,11 +52,14 @@ fun BottomBar() {
             BottomBarIcon(
                 option = BottomBarOption(
                     id = 0,
-                    image = Icons.Default.Home,
-                    title = "Home",
-                    contentDescription = "Home",
+                    image = Icons.Default.Menu,
+                    title = "Countries",
+                    contentDescription = "Countries",
                     selected = (selected == 0),
-                    onClick = { selected = 0 }
+                    onClick = {
+                        navigateToCountryListScreen()
+                        selected = 0
+                    }
                 )
             )
             BottomBarIcon(
@@ -61,17 +69,23 @@ fun BottomBar() {
                     title = "Map",
                     selected = (selected == 1),
                     contentDescription = "Map",
-                    onClick = { selected = 1 }
+                    onClick = {
+                        navigateToMapScreen()
+                        selected = 1
+                    }
                 )
             )
             BottomBarIcon(
                 option = BottomBarOption(
                     id = 2,
-                    image = Icons.Default.Menu,
-                    title = "Menu",
+                    image = Icons.Default.Settings,
+                    title = "Settings",
                     selected = (selected == 2),
-                    contentDescription = "Menu",
-                    onClick = { selected = 2 }
+                    contentDescription = "Settings",
+                    onClick = {
+                        navigateToSettingsScreen()
+                        selected = 2
+                    }
                 )
             )
         }

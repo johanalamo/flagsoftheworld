@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import com.alamo.jc_ui_components.BottomBar
 import com.alamo.ui_countrylist.ui.CountryListEvents
 import com.alamo.ui_countrylist.ui.CountryListState
 
@@ -28,6 +29,8 @@ fun CountryListScaffold(
     state: CountryListState,
     events: (CountryListEvents) -> Unit,
     navigateToCountryDetailsScreen: (String) -> Unit = { null },
+    navigateToMapScreen: () -> Unit = { },
+    navigateToSettingsScreen: () -> Unit = { },
 ) {
     val snackbarHostState = SnackbarHostState()
     Scaffold(
@@ -69,7 +72,10 @@ fun CountryListScaffold(
             }
         },
         bottomBar = {
-            BottomBar()
+            BottomBar(
+                navigateToMapScreen = navigateToMapScreen,
+                navigateToSettingsScreen = navigateToSettingsScreen,
+            )
         }
     )
 }

@@ -19,6 +19,8 @@ import com.alamo.country_interactors.RemoveCountryFromFavoritesUseCase
 import com.alamo.flagsoftheworld.navigation.Screen
 import com.alamo.flagsoftheworld.ui.theme.FlagsOfTheWorldTheme
 import com.alamo.ui_countrydetails.composables.CountryDetailsScaffold
+import com.alamo.ui_countrydetails.composables.MapScaffold
+import com.alamo.ui_countrydetails.composables.SettingsScaffold
 import com.alamo.ui_countrydetails.ui.CountryDetailsEvents
 import com.alamo.ui_countrydetails.ui.CountryDetailsViewModel
 import com.alamo.ui_countrylist.composables.CountryListScaffold
@@ -84,6 +86,12 @@ class MainActivity : ComponentActivity() {
                             navigateToCountryDetailsScreen = {
                                 viewModelDetails.triggerEvent(CountryDetailsEvents.GetCountryDetails(it))
                                 navigationController.navigate(Screen.CountryDetails.createPath(it))
+                            },
+                            navigateToMapScreen = {
+                                navigationController.navigate(Screen.Map.createPath())
+                            },
+                            navigateToSettingsScreen = {
+                                navigationController.navigate(Screen.Settings.createPath())
                             }
                         )
                     }
@@ -98,6 +106,38 @@ class MainActivity : ComponentActivity() {
                                 viewModel.triggerEvent(CountryListEvents.GetCountries)
                                 navigationController.popBackStack()
                             }
+                        )
+                    }
+                    composable(
+                        route = Screen.Map.route
+                    ) {
+                        MapScaffold(
+                            navigateBack = {
+                                viewModel.triggerEvent(CountryListEvents.GetCountries)
+                                navigationController.popBackStack()
+                            },
+                            navigateToCountryListScreen = {
+                                navigationController.navigate(Screen.CountryList.createPath())
+                           },
+                            navigateToSettingsScreen = {
+                                navigationController.navigate(Screen.Settings.createPath())
+                            }
+                        )
+                    }
+                    composable(
+                        route = Screen.Settings.route
+                    ) {
+                        SettingsScaffold(
+                            navigateBack = {
+                                viewModel.triggerEvent(CountryListEvents.GetCountries)
+                                navigationController.popBackStack()
+                            },
+                            navigateToMapScreen = {
+                                navigationController.navigate(Screen.Map.createPath())
+                            },
+                            navigateToCountryListScreen = {
+                                navigationController.navigate(Screen.CountryList.createPath())
+                            },
                         )
                     }
                 }
